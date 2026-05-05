@@ -930,10 +930,15 @@ function selPeriod(btn) {
 }
 
 async function gerarPlanoIA() {
+  let foco, obs, dias;
+  try {
+    foco = document.getElementById('ia-foco').value;
+    obs  = document.getElementById('ia-obs').value.trim();
+    dias = periodoSel || 7;
+  } catch(e) {
+    foco = 'equilibrado'; obs = ''; dias = 7;
+  }
   fecharModal('mo-ia');
-  const foco = document.getElementById('ia-foco').value;
-  const obs  = document.getElementById('ia-obs').value.trim();
-  const dias = periodoSel;
 
   document.getElementById('ia-result').innerHTML = `
     <div class="ia-loading">

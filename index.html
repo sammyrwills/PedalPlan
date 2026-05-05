@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PedalPlan</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c27;
+    --border: #2a2a3a;
+    --accent: #ff5722;
+    --accent2: #ff8a50;
+    --green: #00e676;
+    --blue: #448aff;
+    --text: #f0f0f0;
+    --muted: #6b6b80;
+    --card-bg: #16161f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+.bg-grid {
+position: fixed; inset: 0;
+background-image: linear-gradient(rgba(255,87,34,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,87,34,0.03) 1px, transparent 1px);
+background-size: 40px 40px; pointer-events: none;
+}
+.bg-glow {
+position: fixed; width: 500px; height: 500px; border-radius: 50%;
+background: radial-gradient(circle, rgba(255,87,34,0.08) 0%, transparent 70%);
+top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+}
+
+/* LOGIN */
+#login-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; position: relative; }
+.login-card { position: relative; z-index: 1; text-align: center; max-width: 380px; width: 100%; }
+.logo { font-family: ‘Barlow Condensed’, sans-serif; font-weight: 900; font-size: 3.5rem; letter-spacing: -1px; line-height: 1; margin-bottom: 0.25rem; }
+.logo span { color: var(–accent); }
+.tagline { color: var(–muted); font-size: 0.9rem; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3rem; }
+.strava-btn {
+display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+background: #fc4c02; color: white; border: none; border-radius: 6px;
+padding: 1rem 2rem; font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+cursor: pointer; width: 100%; transition: opacity 0.2s; text-decoration: none;
+}
+.strava-btn:hover { opacity: 0.9; }
+.strava-btn:active { opacity: 0.8; }
+.strava-icon { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+.info-note { margin-top: 2rem; font-size: 0.75rem; color: var(–muted); line-height: 1.6; }
+
+/* LOADING */
+#loading-screen { min-height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+.spinner { width: 40px; height: 40px; border: 3px solid var(–border); border-top-color: var(–accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: var(–muted); font-size: 0.9rem; }
+
+/* APP */
+#app { display: none; min-height: 100vh; padding-bottom: 80px; }
+.app-header { background: var(–surface); border-bottom: 1px solid var(–border); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.app-logo { font-family: ‘Barlow Condensed’, sans-serif; font-weight: 900; font-size: 1.5rem; }
+.app-logo span { color: var(–accent); }
+.user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(–accent); display: flex; align-items: center; justify-content: center; font-family: ‘Barlow Condensed’, sans-serif; font-weight: 700; font-size: 1rem; overflow: hidden; cursor: pointer; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.tabs { display: flex; background: var(–surface); border-bottom: 1px solid var(–border); overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 1; min-width: 80px; padding: 0.85rem 0.5rem; background: none; border: none; color: var(–muted); font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.tab.active { color: var(–accent); border-bottom-color: var(–accent); }
+
+.page { display: none; padding: 1.25rem; }
+.page.active { display: block; }
+
+.card { background: var(–card-bg); border: 1px solid var(–border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+.card-title { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(–muted); margin-bottom: 0.75rem; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+.stat-card { background: var(–card-bg); border: 1px solid var(–border); border-radius: 10px; padding: 1rem; position: relative; overflow: hidden; }
+.stat-card::before { content: ‘’; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.stat-card.orange::before { background: var(–accent); }
+.stat-card.green::before { background: var(–green); }
+.stat-card.blue::before { background: var(–blue); }
+.stat-card.purple::before { background: #b388ff; }
+.stat-value { font-family: ‘Barlow Condensed’, sans-serif; font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+.stat-unit { font-size: 0.75rem; color: var(–muted); }
+.stat-label { font-size: 0.75rem; color: var(–muted); margin-top: 0.25rem; }
+
+.zones-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.zone-item { display: flex; align-items: center; gap: 0.75rem; }
+.zone-bar-wrap { flex: 1; height: 6px; background: var(–surface2); border-radius: 3px; overflow: hidden; }
+.zone-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.zone-label { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.75rem; font-weight: 600; width: 50px; color: var(–muted); }
+.zone-pct { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.75rem; width: 30px; text-align: right; color: var(–muted); }
+
+.activity-item { display: flex; align-items: center; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(–border); }
+.activity-item:last-child { border-bottom: none; }
+.activity-icon { width: 40px; height: 40px; background: var(–surface2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.activity-info { flex: 1; min-width: 0; }
+.activity-name { font-family: ‘Barlow Condensed’, sans-serif; font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.activity-meta { font-size: 0.75rem; color: var(–muted); margin-top: 0.15rem; }
+.activity-dist { font-family: ‘Barlow Condensed’, sans-serif; font-size: 1.1rem; font-weight: 700; color: var(–accent); flex-shrink: 0; }
+
+.week-header { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(–muted); margin: 1.25rem 0 0.75rem; }
+.week-header:first-child { margin-top: 0; }
+
+.treino-item { background: var(–card-bg); border: 1px solid var(–border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: border-color 0.2s; }
+.treino-item:hover { border-color: var(–accent); }
+.treino-item.concluido { opacity: 0.5; border-color: var(–green); }
+.treino-item.hoje { border-color: var(–accent); background: rgba(255,87,34,0.05); }
+.treino-dia { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(–muted); width: 30px; flex-shrink: 0; text-align: center; }
+.treino-dia.hoje-dia { color: var(–accent); }
+.treino-info { flex: 1; }
+.treino-nome { font-family: ‘Barlow Condensed’, sans-serif; font-size: 1.05rem; font-weight: 600; }
+.treino-desc { font-size: 0.78rem; color: var(–muted); margin-top: 0.15rem; }
+.treino-badge { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px; text-transform: uppercase; flex-shrink: 0; }
+.badge-z2 { background: rgba(68,138,255,0.15); color: var(–blue); }
+.badge-inter { background: rgba(255,87,34,0.15); color: var(–accent); }
+.badge-long { background: rgba(0,230,118,0.15); color: var(–green); }
+.badge-descanso { background: rgba(107,107,128,0.15); color: var(–muted); }
+.badge-forca { background: rgba(179,136,255,0.15); color: #b388ff; }
+
+.fab { position: fixed; bottom: 90px; right: 1.25rem; width: 52px; height: 52px; background: var(–accent); border: none; border-radius: 50%; color: white; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(255,87,34,0.4); z-index: 50; transition: transform 0.2s; }
+.fab:hover { transform: scale(1.1); }
+.fab:active { transform: scale(0.95); }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: flex-end; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(–surface); border-top: 1px solid var(–border); border-radius: 16px 16px 0 0; width: 100%; max-height: 85vh; overflow-y: auto; padding: 1.5rem 1.25rem 2rem; animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-handle { width: 40px; height: 4px; background: var(–border); border-radius: 2px; margin: 0 auto 1.5rem; }
+.modal-title { font-family: ‘Barlow Condensed’, sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+.form-group { margin-bottom: 1rem; }
+.form-label { display: block; font-size: 0.75rem; font-weight: 500; color: var(–muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.form-input, .form-select, .form-textarea { width: 100%; background: var(–surface2); border: 1px solid var(–border); border-radius: 8px; padding: 0.75rem 1rem; color: var(–text); font-family: ‘Barlow’, sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(–accent); }
+.form-textarea { resize: vertical; min-height: 80px; }
+
+.tipo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.tipo-btn { background: var(–surface2); border: 1px solid var(–border); border-radius: 8px; padding: 0.65rem 0.5rem; color: var(–muted); font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-align: center; }
+.tipo-btn.selected { border-color: var(–accent); color: var(–accent); background: rgba(255,87,34,0.08); }
+
+.btn-primary { width: 100%; background: var(–accent); border: none; border-radius: 8px; padding: 1rem; color: white; font-family: ‘Barlow Condensed’, sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; margin-top: 1rem; transition: opacity 0.2s; }
+.btn-primary:active { opacity: 0.85; }
+.btn-secondary { width: 100%; background: transparent; border: 1px solid var(–border); border-radius: 8px; padding: 0.75rem; color: var(–muted); font-family: ‘Barlow’, sans-serif; font-size: 0.85rem; cursor: pointer; margin-top: 0.5rem; transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(–accent); color: var(–accent); }
+
+.config-section { margin-bottom: 1.5rem; }
+.config-title { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(–muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(–border); }
+.config-item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(–border); }
+.config-item:last-child { border-bottom: none; }
+.config-label { font-size: 0.9rem; }
+.config-value { font-size: 0.85rem; color: var(–muted); }
+.tag-strava { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(252,76,2,0.15); color: #fc4c02; border-radius: 4px; padding: 0.2rem 0.6rem; font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.75rem; font-weight: 700; }
+
+.inline-loading { display: flex; align-items: center; gap: 0.5rem; color: var(–muted); font-size: 0.85rem; padding: 1rem 0; }
+.inline-spinner { width: 18px; height: 18px; border: 2px solid var(–border); border-top-color: var(–accent); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+
+.empty-state { text-align: center; padding: 2rem 1rem; color: var(–muted); font-size: 0.85rem; line-height: 1.6; }
+
+.error-banner { background: rgba(239,83,80,0.1); border: 1px solid rgba(239,83,80,0.3); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; color: #ef5350; margin-bottom: 1rem; }
+</style>
+
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<!-- LOGIN -->
+
+<div id="login-screen">
+  <div class="login-card">
+    <div class="logo">PEDAL<span>PLAN</span></div>
+    <div class="tagline">Treino estruturado para ciclistas</div>
+    <a class="strava-btn" id="strava-login-btn" href="#">
+      <svg class="strava-icon" viewBox="0 0 24 24">
+        <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/>
+      </svg>
+      Conectar com Strava
+    </a>
+    <p class="info-note">🔒 Acesso somente leitura às suas atividades.<br>Seus dados de treino ficam no seu dispositivo.</p>
+  </div>
+</div>
+
+<!-- LOADING -->
+
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-text">Conectando ao Strava...</div>
+</div>
+
+<!-- APP -->
+
+<div id="app">
+  <header class="app-header">
+    <div class="app-logo">PEDAL<span>PLAN</span></div>
+    <div class="user-avatar" id="user-avatar">S</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPage('dashboard', this)">Dashboard</button>
+    <button class="tab" onclick="showPage('plano', this)">Plano</button>
+    <button class="tab" onclick="showPage('atividades', this)">Atividades</button>
+    <button class="tab" onclick="showPage('config', this)">Perfil</button>
+  </div>
+
+  <!-- DASHBOARD -->
+
+  <div class="page active" id="page-dashboard">
+    <div id="error-banner"></div>
+    <div class="stats-grid">
+      <div class="stat-card orange">
+        <div class="stat-value" id="stat-dist">—</div>
+        <div class="stat-unit">km esta semana</div>
+        <div class="stat-label">Distância</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-value" id="stat-rides">—</div>
+        <div class="stat-unit">pedaladas</div>
+        <div class="stat-label">Esta semana</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-value" id="stat-fc">—</div>
+        <div class="stat-unit">bpm médio</div>
+        <div class="stat-label">FC média</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-value" id="stat-tempo">—</div>
+        <div class="stat-unit">horas</div>
+        <div class="stat-label">No pedal</div>
+      </div>
+    </div>
+
+```
+<div class="card">
+  <div class="card-title">📅 Próximo treino</div>
+  <div id="proximo-treino"><div class="empty-state">Nenhum treino planejado.<br>Adicione um treino no plano!</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title">❤️ Zonas de FC (últimas atividades)</div>
+  <div class="zones-list" id="zones-list">
+    <div class="inline-loading"><div class="inline-spinner"></div> Calculando zonas...</div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- PLANO -->
+
+  <div class="page" id="page-plano">
+    <div class="week-header">Esta semana</div>
+    <div id="plano-lista"><div class="empty-state">Nenhum treino ainda.<br>Toca no + pra adicionar!</div></div>
+  </div>
+
+  <!-- ATIVIDADES -->
+
+  <div class="page" id="page-atividades">
+    <div class="card">
+      <div class="card-title">🚴 Últimas atividades do Strava</div>
+      <div id="atividades-lista">
+        <div class="inline-loading"><div class="inline-spinner"></div> Carregando do Strava...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL -->
+
+  <div class="page" id="page-config">
+    <div class="config-section">
+      <div class="config-title">Conta</div>
+      <div class="config-item">
+        <span class="config-label">Atleta</span>
+        <span class="config-value" id="cfg-nome">—</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">Cidade</span>
+        <span class="config-value" id="cfg-cidade">—</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">Strava</span>
+        <span class="tag-strava">● CONECTADO</span>
+      </div>
+      <div class="config-item">
+        <span class="config-label">GPS</span>
+        <span class="config-value">iGPSPORT BSC200</span>
+      </div>
+    </div>
+
+```
+<div class="config-section">
+  <div class="config-title">Zonas de FC</div>
+  <div class="config-item">
+    <span class="config-label">FC Máxima</span>
+    <div style="display:flex;align-items:center;gap:0.5rem">
+      <input type="number" id="fcmax-input" class="form-input" style="width:80px;padding:0.3rem 0.5rem;text-align:center" value="185" min="120" max="220">
+      <span class="config-value">bpm</span>
+    </div>
+  </div>
+  <div class="config-item"><span class="config-label">Z1 Recuperação</span><span class="config-value" id="z1-range">—</span></div>
+  <div class="config-item"><span class="config-label">Z2 Aeróbico</span><span class="config-value" id="z2-range">—</span></div>
+  <div class="config-item"><span class="config-label">Z3 Tempo</span><span class="config-value" id="z3-range">—</span></div>
+  <div class="config-item"><span class="config-label">Z4 Limiar</span><span class="config-value" id="z4-range">—</span></div>
+  <div class="config-item"><span class="config-label">Z5 VO2 Max</span><span class="config-value" id="z5-range">—</span></div>
+  <button class="btn-primary" style="margin-top:0.75rem" onclick="salvarFcMax()">Salvar FC Máxima</button>
+</div>
+
+<div class="config-section">
+  <div class="config-title">Sessão</div>
+  <div class="config-item" style="cursor:pointer" onclick="sair()">
+    <span class="config-label" style="color:#ef5350">Desconectar do Strava</span>
+  </div>
+</div>
+```
+
+  </div>
+
+<button class="fab" onclick="abrirModalTreino()">+</button>
+
+</div>
+
+<!-- MODAL TREINO -->
+
+<div class="modal-overlay" id="modal-treino">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Adicionar Treino</div>
+    <div class="form-group">
+      <label class="form-label">Tipo</label>
+      <div class="tipo-grid">
+        <button class="tipo-btn selected" data-tipo="Z2" onclick="selecionarTipo(this)">Z2 Base</button>
+        <button class="tipo-btn" data-tipo="Intervalado" onclick="selecionarTipo(this)">Intervalado</button>
+        <button class="tipo-btn" data-tipo="Longão" onclick="selecionarTipo(this)">Longão</button>
+        <button class="tipo-btn" data-tipo="Força" onclick="selecionarTipo(this)">Força</button>
+        <button class="tipo-btn" data-tipo="Recuperação" onclick="selecionarTipo(this)">Recup.</button>
+        <button class="tipo-btn" data-tipo="Descanso" onclick="selecionarTipo(this)">Descanso</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Dia</label>
+      <input type="date" class="form-input" id="treino-data">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Duração estimada</label>
+      <select class="form-select" id="treino-duracao">
+        <option>30 min</option>
+        <option>45 min</option>
+        <option selected>1 hora</option>
+        <option>1h30</option>
+        <option>2 horas</option>
+        <option>2h30</option>
+        <option>3+ horas</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Observação</label>
+      <textarea class="form-textarea" id="treino-obs" placeholder="Ex: manter FC na Z2, foco na cadência..."></textarea>
+    </div>
+    <button class="btn-primary" onclick="salvarTreino()">Salvar treino</button>
+    <button class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG STRAVA
+// ============================================================
+const CLIENT_ID     = '235662';
+const CLIENT_SECRET = '0b63464e23bd1405fe18fa1054a7b755990f2ce1';
+const REDIRECT_URI  = 'https://sammyrwills.github.io/PedalPlan/';
+const SCOPE         = 'read,activity:read_all';
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  athlete: null,
+  accessToken: null,
+  activities: [],
+  plano: [],
+  fcMax: 185
+};
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+window.addEventListener('load', async () => {
+  carregarLocal();
+
+  const params = new URLSearchParams(window.location.search);
+  const code   = params.get('code');
+
+  if (code) {
+    // Veio do OAuth — troca o code pelo token
+    mostrarLoading(true);
+    window.history.replaceState({}, document.title, window.location.pathname);
+    await trocarToken(code);
+  } else if (state.accessToken) {
+    // Já tem token salvo
+    await iniciarApp();
+  } else {
+    // Tela de login
+    configurarBotaoLogin();
+    mostrarTela('login');
+  }
+});
+
+function configurarBotaoLogin() {
+  const url = `https://www.strava.com/oauth/authorize`
+    + `?client_id=${CLIENT_ID}`
+    + `&response_type=code`
+    + `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`
+    + `&scope=${SCOPE}`
+    + `&approval_prompt=auto`;
+  document.getElementById('strava-login-btn').href = url;
+}
+
+async function trocarToken(code) {
+  try {
+    const res = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        code,
+        grant_type: 'authorization_code'
+      })
+    });
+
+    if (!res.ok) throw new Error('Falha na autenticação');
+
+    const data = await res.json();
+    state.accessToken = data.access_token;
+    state.refreshToken = data.refresh_token;
+    state.expiresAt = data.expires_at;
+    state.athlete = data.athlete;
+
+    salvarLocal();
+    await iniciarApp();
+  } catch (e) {
+    mostrarTela('login');
+    configurarBotaoLogin();
+    console.error(e);
+  }
+}
+
+async function refreshTokenSeNecessario() {
+  if (!state.expiresAt) return;
+  const agora = Math.floor(Date.now() / 1000);
+  if (agora < state.expiresAt - 300) return; // ainda válido
+
+  try {
+    const res = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        refresh_token: state.refreshToken,
+        grant_type: 'refresh_token'
+      })
+    });
+    const data = await res.json();
+    state.accessToken = data.access_token;
+    state.refreshToken = data.refresh_token;
+    state.expiresAt = data.expires_at;
+    salvarLocal();
+  } catch(e) {
+    console.error('Erro ao renovar token', e);
+  }
+}
+
+// ============================================================
+// APP
+// ============================================================
+async function iniciarApp() {
+  mostrarLoading(true);
+
+  await refreshTokenSeNecessario();
+
+  // Busca dados do atleta se não tiver
+  if (!state.athlete) {
+    try {
+      const res = await fetch('https://www.strava.com/api/v3/athlete', {
+        headers: { 'Authorization': `Bearer ${state.accessToken}` }
+      });
+      state.athlete = await res.json();
+      salvarLocal();
+    } catch(e) { console.error(e); }
+  }
+
+  mostrarTela('app');
+
+  // Avatar e nome
+  const av = document.getElementById('user-avatar');
+  if (state.athlete?.profile_medium) {
+    av.innerHTML = `<img src="${state.athlete.profile_medium}" alt="">`;
+  } else if (state.athlete?.firstname) {
+    av.textContent = state.athlete.firstname[0];
+  }
+
+  document.getElementById('cfg-nome').textContent =
+    `${state.athlete?.firstname || ''} ${state.athlete?.lastname || ''}`.trim() || '—';
+  document.getElementById('cfg-cidade').textContent =
+    state.athlete?.city || state.athlete?.country || '—';
+
+  document.getElementById('fcmax-input').value = state.fcMax;
+
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('treino-data').value = hoje;
+
+  calcularZonas();
+  carregarPlanoUI();
+  await carregarAtividades();
+  calcularStats();
+  calcularZonasFC();
+  atualizarProximoTreino();
+}
+
+// ============================================================
+// STRAVA API
+// ============================================================
+async function carregarAtividades() {
+  try {
+    // Últimas 30 atividades
+    const res = await fetch(
+      'https://www.strava.com/api/v3/athlete/activities?per_page=30',
+      { headers: { 'Authorization': `Bearer ${state.accessToken}` } }
+    );
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const todas = await res.json();
+    // Filtra só rides
+    state.activities = todas.filter(a =>
+      a.type === 'Ride' || a.type === 'VirtualRide' || a.sport_type === 'Ride'
+    );
+
+    salvarLocal();
+    renderAtividades();
+  } catch(e) {
+    console.error('Erro ao carregar atividades:', e);
+    document.getElementById('atividades-lista').innerHTML =
+      `<div class="error-banner">Erro ao carregar atividades. Tenta recarregar a página.</div>`;
+  }
+}
+
+function renderAtividades() {
+  const lista = document.getElementById('atividades-lista');
+
+  if (!state.activities.length) {
+    lista.innerHTML = '<div class="empty-state">Nenhuma pedalada encontrada no Strava.</div>';
+    return;
+  }
+
+  lista.innerHTML = state.activities.slice(0, 15).map(a => {
+    const dist = (a.distance / 1000).toFixed(1);
+    const tempo = Math.round(a.moving_time / 60);
+    const fc = a.average_heartrate ? `FC ${Math.round(a.average_heartrate)}bpm · ` : '';
+    const data = new Date(a.start_date_local);
+    const dataStr = `${data.getDate().toString().padStart(2,'0')}/${(data.getMonth()+1).toString().padStart(2,'0')}`;
+    return `
+      <div class="activity-item">
+        <div class="activity-icon">🚴</div>
+        <div class="activity-info">
+          <div class="activity-name">${a.name}</div>
+          <div class="activity-meta">${dataStr} · ${tempo}min · ${fc}${elevacao(a)}</div>
+        </div>
+        <div class="activity-dist">${dist}km</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function elevacao(a) {
+  if (!a.total_elevation_gain || a.total_elevation_gain < 5) return '';
+  return `↑${Math.round(a.total_elevation_gain)}m`;
+}
+
+// ============================================================
+// STATS DA SEMANA
+// ============================================================
+function calcularStats() {
+  const agora = new Date();
+  const inicioSemana = new Date(agora);
+  inicioSemana.setDate(agora.getDate() - agora.getDay());
+  inicioSemana.setHours(0,0,0,0);
+
+  const semana = state.activities.filter(a => new Date(a.start_date_local) >= inicioSemana);
+
+  const dist  = semana.reduce((s, a) => s + a.distance, 0) / 1000;
+  const tempo = semana.reduce((s, a) => s + a.moving_time, 0) / 3600;
+  const fcActs = semana.filter(a => a.average_heartrate);
+  const fc    = fcActs.length
+    ? Math.round(fcActs.reduce((s,a) => s + a.average_heartrate, 0) / fcActs.length)
+    : null;
+
+  document.getElementById('stat-dist').textContent  = dist.toFixed(1);
+  document.getElementById('stat-rides').textContent = semana.length;
+  document.getElementById('stat-fc').textContent    = fc || '—';
+  document.getElementById('stat-tempo').textContent = tempo.toFixed(1);
+}
+
+// ============================================================
+// ZONAS FC
+// ============================================================
+function calcularZonas() {
+  const fc = parseInt(document.getElementById('fcmax-input').value) || state.fcMax;
+  document.getElementById('z1-range').textContent = `< ${Math.round(fc * 0.6)} bpm`;
+  document.getElementById('z2-range').textContent = `${Math.round(fc * 0.6)}–${Math.round(fc * 0.7)} bpm`;
+  document.getElementById('z3-range').textContent = `${Math.round(fc * 0.7)}–${Math.round(fc * 0.8)} bpm`;
+  document.getElementById('z4-range').textContent = `${Math.round(fc * 0.8)}–${Math.round(fc * 0.9)} bpm`;
+  document.getElementById('z5-range').textContent = `> ${Math.round(fc * 0.9)} bpm`;
+}
+
+function salvarFcMax() {
+  state.fcMax = parseInt(document.getElementById('fcmax-input').value) || 185;
+  salvarLocal();
+  calcularZonas();
+  calcularZonasFC();
+  alert('FC Máxima salva!');
+}
+
+function calcularZonasFC() {
+  const fc = state.fcMax;
+  const zonas = [
+    { label: 'Z1 Recup.', min: 0,    max: fc * 0.6,  cor: '#90caf9' },
+    { label: 'Z2 Aerób.', min: fc*0.6, max: fc * 0.7, cor: 'var(--green)' },
+    { label: 'Z3 Tempo',  min: fc*0.7, max: fc * 0.8, cor: '#ffcc02' },
+    { label: 'Z4 Limiar', min: fc*0.8, max: fc * 0.9, cor: 'var(--accent2)' },
+    { label: 'Z5 VO2',    min: fc*0.9, max: 999,       cor: '#ef5350' },
+  ];
+
+  // Calcula tempo em cada zona pelas atividades com HR streams (usamos médias como aproximação)
+  let totais = [0, 0, 0, 0, 0];
+  let total = 0;
+
+  state.activities.slice(0, 10).forEach(a => {
+    if (!a.average_heartrate || !a.moving_time) return;
+    const t = a.moving_time;
+    total += t;
+    const z = zonas.findIndex((z, i) => a.average_heartrate >= z.min && a.average_heartrate < z.max);
+    if (z >= 0) totais[z] += t;
+  });
+
+  const lista = document.getElementById('zones-list');
+
+  if (total === 0) {
+    lista.innerHTML = '<div class="empty-state">Sem dados de FC nas últimas atividades.</div>';
+    return;
+  }
+
+  lista.innerHTML = zonas.map((z, i) => {
+    const pct = total > 0 ? Math.round((totais[i] / total) * 100) : 0;
+    return `
+      <div class="zone-item">
+        <span class="zone-label">${z.label}</span>
+        <div class="zone-bar-wrap">
+          <div class="zone-bar" style="width:${pct}%;background:${z.cor}"></div>
+        </div>
+        <span class="zone-pct">${pct}%</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// PLANO DE TREINO
+// ============================================================
+let tipoSelecionado = 'Z2';
+
+function carregarPlanoUI() {
+  const lista = document.getElementById('plano-lista');
+  if (!state.plano.length) {
+    lista.innerHTML = '<div class="empty-state">Nenhum treino ainda.<br>Toca no + pra adicionar!</div>';
+    return;
+  }
+
+  // Ordena por data
+  const sorted = [...state.plano].sort((a, b) => new Date(a.data) - new Date(b.data));
+
+  // Agrupa por semana
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const semanaAtual = [];
+  const proximas = [];
+
+  sorted.forEach(t => {
+    const d = new Date(t.data + 'T12:00:00');
+    const diffDias = Math.floor((d - hoje) / 86400000);
+    if (diffDias >= -1 && diffDias <= 6) semanaAtual.push(t);
+    else if (diffDias > 6) proximas.push(t);
+  });
+
+  let html = '';
+
+  if (semanaAtual.length) {
+    html += '<div class="week-header">Esta semana</div>';
+    html += semanaAtual.map(t => treinoHTML(t)).join('');
+  }
+
+  if (proximas.length) {
+    html += '<div class="week-header">Próximas semanas</div>';
+    html += proximas.map(t => treinoHTML(t)).join('');
+  }
+
+  if (!semanaAtual.length && !proximas.length && sorted.length) {
+    html += '<div class="week-header">Treinos anteriores</div>';
+    html += sorted.map(t => treinoHTML(t)).join('');
+  }
+
+  lista.innerHTML = html;
+  atualizarProximoTreino();
+}
+
+function treinoHTML(t) {
+  const d = new Date(t.data + 'T12:00:00');
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const dia = dias[d.getDay()];
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const isHoje = d.toDateString() === hoje.toDateString();
+
+  return `
+    <div class="treino-item ${t.concluido ? 'concluido' : ''} ${isHoje ? 'hoje' : ''}"
+         onclick="toggleConcluido('${t.id}')">
+      <div class="treino-dia ${isHoje ? 'hoje-dia' : ''}">${dia}</div>
+      <div class="treino-info">
+        <div class="treino-nome">${t.nome} ${t.concluido ? '✓' : ''}</div>
+        <div class="treino-desc">${t.desc} · ${t.duracao}</div>
+      </div>
+      <span class="treino-badge badge-${badgeClass(t.tipo)}">${t.tipo}</span>
+    </div>
+  `;
+}
+
+function badgeClass(tipo) {
+  const m = { 'Z2':'z2','Intervalado':'inter','Longão':'long','Descanso':'descanso','Força':'forca','Recuperação':'descanso' };
+  return m[tipo] || 'descanso';
+}
+
+function toggleConcluido(id) {
+  const t = state.plano.find(x => x.id === id);
+  if (t) { t.concluido = !t.concluido; salvarLocal(); carregarPlanoUI(); }
+}
+
+function atualizarProximoTreino() {
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const proximo = state.plano
+    .filter(t => !t.concluido && new Date(t.data + 'T12:00:00') >= hoje)
+    .sort((a,b) => new Date(a.data) - new Date(b.data))[0];
+
+  const el = document.getElementById('proximo-treino');
+  if (!proximo) {
+    el.innerHTML = '<div class="empty-state">Nenhum treino pendente.<br>Adiciona um no Plano!</div>';
+    return;
+  }
+
+  const d = new Date(proximo.data + 'T12:00:00');
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700">${proximo.nome}</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem">${dias[d.getDay()]} · ${proximo.duracao} · ${proximo.desc}</div>
+      </div>
+      <span class="treino-badge badge-${badgeClass(proximo.tipo)}">${proximo.tipo}</span>
+    </div>
+  `;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function abrirModalTreino() { document.getElementById('modal-treino').classList.add('open'); }
+function fecharModal()      { document.getElementById('modal-treino').classList.remove('open'); }
+
+function selecionarTipo(btn) {
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  tipoSelecionado = btn.dataset.tipo;
+}
+
+function salvarTreino() {
+  const data    = document.getElementById('treino-data').value;
+  const duracao = document.getElementById('treino-duracao').value;
+  const obs     = document.getElementById('treino-obs').value.trim();
+
+  if (!data) { alert('Escolhe um dia!'); return; }
+
+  state.plano.push({
+    id: Date.now().toString(),
+    data, tipo: tipoSelecionado,
+    nome: tipoSelecionado === 'Z2' ? 'Z2 Base' : tipoSelecionado,
+    desc: obs || `Treino ${tipoSelecionado}`,
+    duracao, concluido: false
+  });
+
+  salvarLocal();
+  carregarPlanoUI();
+  fecharModal();
+  document.getElementById('treino-obs').value = '';
+  showPage('plano', document.querySelectorAll('.tab')[1]);
+}
+
+// ============================================================
+// PERSISTÊNCIA LOCAL
+// ============================================================
+function salvarLocal() {
+  localStorage.setItem('pedalplan', JSON.stringify({
+    accessToken:  state.accessToken,
+    refreshToken: state.refreshToken,
+    expiresAt:    state.expiresAt,
+    athlete:      state.athlete,
+    activities:   state.activities,
+    plano:        state.plano,
+    fcMax:        state.fcMax
+  }));
+}
+
+function carregarLocal() {
+  try {
+    const d = JSON.parse(localStorage.getItem('pedalplan') || '{}');
+    state.accessToken  = d.accessToken  || null;
+    state.refreshToken = d.refreshToken || null;
+    state.expiresAt    = d.expiresAt    || null;
+    state.athlete      = d.athlete      || null;
+    state.activities   = d.activities   || [];
+    state.plano        = d.plano        || [];
+    state.fcMax        = d.fcMax        || 185;
+  } catch(e) { console.error(e); }
+}
+
+// ============================================================
+// NAVEGAÇÃO
+// ============================================================
+function showPage(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+}
+
+function mostrarTela(tela) {
+  document.getElementById('login-screen').style.display   = tela === 'login'   ? 'flex'  : 'none';
+  document.getElementById('loading-screen').style.display = tela === 'loading' ? 'flex'  : 'none';
+  document.getElementById('app').style.display            = tela === 'app'     ? 'block' : 'none';
+}
+
+function mostrarLoading(sim) { mostrarTela(sim ? 'loading' : 'login'); }
+
+function sair() {
+  if (confirm('Desconectar do Strava?')) {
+    localStorage.removeItem('pedalplan');
+    location.reload();
+  }
+}
+
+// Fechar modal clicando fora
+document.getElementById('modal-treino').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-treino')) fecharModal();
+});
+
+// Atualiza zonas ao mudar FC Max
+document.getElementById('fcmax-input').addEventListener('input', calcularZonas);
+</script>
+
+</body>
+</html>

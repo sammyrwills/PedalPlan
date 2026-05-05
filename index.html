@@ -378,16 +378,6 @@ line-height:1;
     </div>
   </header>
 
-  <div class="tabs">
-    <button class="tab on" onclick="pg('dash',this)">Dashboard</button>
-    <button class="tab" onclick="pg('plano',this)">Plano</button>
-    <button class="tab" onclick="pg('prog',this)">Progresso</button>
-    <button class="tab" onclick="pg('rides',this)">Rides</button>
-    <button class="tab" onclick="pg('analise',this)">Análise IA</button>
-    <button class="tab" onclick="pg('manut',this)">Manutenção</button>
-    <button class="tab" onclick="pg('perfil',this)">Perfil</button>
-  </div>
-
   <div class="pages">
 
 ```
@@ -534,8 +524,9 @@ line-height:1;
     <button class="nav-b" onclick="pg('plano',null,this)"><div class="nav-ico">📅</div><div class="nav-lbl">Plano</div></button>
     <button class="nav-b" onclick="pg('prog',null,this)"><div class="nav-ico">📈</div><div class="nav-lbl">Progresso</div></button>
     <button class="nav-b" onclick="pg('rides',null,this)"><div class="nav-ico">🚴</div><div class="nav-lbl">Rides</div></button>
-    <button class="nav-b" onclick="pg('analise',null,this)"><div class="nav-ico">🔍</div><div class="nav-lbl">IA</div></button>
+    <button class="nav-b" onclick="pg('analise',null,this)"><div class="nav-ico">🤖</div><div class="nav-lbl">IA</div></button>
     <button class="nav-b" onclick="pg('manut',null,this)"><div class="nav-ico">🔧</div><div class="nav-lbl">Manutenção</div></button>
+    <button class="nav-b" onclick="pg('perfil',null,this)"><div class="nav-ico">👤</div><div class="nav-lbl">Perfil</div></button>
   </nav>
 </div>
 
@@ -982,7 +973,7 @@ async function gerarPlanoIA() {
       <div class="ia-loading-txt"><strong>IA analisando ${S.activities.length} pedaladas...</strong><br>Montando plano de ${dias} dias personalizado.</div>
     </div>`;
 
-  pg('plano', document.querySelectorAll('.tab')[1]);
+  pg('plano',null,document.querySelectorAll('.nav-b')[1]);
 
   const resumo = (S.activities||[]).slice(0,20).map(a=>({
     nome:String(a.name||''),
@@ -1393,7 +1384,7 @@ function salvarTreino() {
   S.plano.push({id:Date.now()+'',data,tipo:tipoSel,nome:tipoSel==='Z2'?'Z2 Base':tipoSel,desc:obs||`Treino ${tipoSel}`,duracao:dur,concluido:false,geradoIA:false});
   save();renderPlano();proxTreino();fecharModal('mo-treino');
   document.getElementById('t-obs').value='';
-  pg('plano',document.querySelectorAll('.tab')[1]);
+  pg('plano',null,document.querySelectorAll('.nav-b')[1]);
 }
 
 // ============================================================
@@ -1412,16 +1403,15 @@ function sair(){if(confirm('Desconectar?')){localStorage.removeItem('pp5');locat
 // ============================================================
 function pg(id,tabEl,navEl){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('on'));
   document.getElementById('p-'+id).classList.add('on');
-  if(tabEl)tabEl.classList.add('on');
   if(navEl)navEl.classList.add('on');
-  // Sync tabs and nav
-  const tabMap={dash:0,plano:1,prog:2,rides:3,analise:4,manut:5,perfil:6};
-  const navMap={dash:0,plano:1,prog:2,rides:3,analise:4,manut:5};
-  if(!tabEl&&tabMap[id]!==undefined)document.querySelectorAll('.tab')[tabMap[id]]?.classList.add('on');
+  const navMap={dash:0,plano:1,prog:2,rides:3,analise:4,manut:5,perfil:6};
   if(!navEl&&navMap[id]!==undefined)document.querySelectorAll('.nav-b')[navMap[id]]?.classList.add('on');
+  // Update header title
+  const titles={dash:'Dashboard',plano:'Plano',prog:'Progresso',rides:'Rides',analise:'Análise IA',manut:'Manutenção',perfil:'Perfil'};
+  const titleEl = document.getElementById('page-title');
+  if(titleEl) titleEl.textContent = titles[id]||'PedalPlan';
 }
 
 function tela(id,txt){

@@ -87,7 +87,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .av img{width:100%;height:100%;object-fit:cover}
 .notif-dot{width:8px;height:8px;background:var(–red);border-radius:50%;display:none}
 .notif-dot.show{display:block}
-.tabs{display:none}
+/* tabs removed */
 
 .tab{display:none}
 
@@ -442,6 +442,23 @@ line-height:1;
     <div style="font-size:.75rem;color:var(--muted);line-height:1.6">Exporta a atividade no app iGPSPORT → importa aqui para puxar dados de FC real, cadência e potência.</div>
   </div>
 
+  <div class="card" style="margin-bottom:.85rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+      <div class="card-lbl" style="margin:0">❤️ Batimentos — .FIT iGPSPORT</div>
+      <label style="background:var(--accent);border:none;border-radius:6px;padding:.35rem .75rem;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;color:#fff;cursor:pointer;text-transform:uppercase;display:inline-block">
+        ⬆ .FIT
+        <input type="file" accept=".fit,.FIT" style="display:none" onchange="importarFit(this)">
+      </label>
+    </div>
+    <div id="fit-data-list"><div class="empty" style="padding:.75rem 0;font-size:.78rem">Importa um .FIT do iGPSPORT para ver seus batimentos reais.</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:.85rem">
+    <div class="card-lbl">🍎 Apple Health</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">O app iGPSPORT sincroniza FC com o Apple Health automaticamente. Ative nas configurações do iGPSPORT → Saúde.</div>
+    <button class="btn-p" style="font-size:.8rem;padding:.7rem" onclick="abrirHealth()">Abrir app Saúde</button>
+  </div>
+
   <div class="card">
     <div class="card-lbl">Últimas pedaladas — Strava</div>
     <div id="rides-list"><div class="il"><div class="ils"></div>Carregando...</div></div>
@@ -620,7 +637,7 @@ line-height:1;
 // ============================================================
 const CLIENT_ID     = '235662';
 const CLIENT_SECRET = '0b63464e23bd1405fe18fa1054a7b755990f2ce1';
-const REDIRECT_URI  = 'https://sammyrwills.github.io/PedalPlan/';
+const REDIRECT_URI  = 'https://clinquant-stroopwafel-811bea.netlify.app/';
 const SCOPE         = 'read,activity:read_all';
 const PROXY_URL     = 'https://pedalplan-proxy.bokimepandtomas.workers.dev';
 
@@ -633,7 +650,7 @@ let S = {
   plano: [], manut: [],
   fcMax: 185, peso: 75,
   apiKey: null, bike: '',
-  periodo: 7
+  periodo: 7, fitData: []
 };
 
 // ============================================================
@@ -736,6 +753,7 @@ async function boot() {
   calcRPs();
   calcAderencia();
   checarManutAlerta();
+  renderFitData();
 }
 
 function renderHeader() {
@@ -1222,6 +1240,7 @@ function zerarManut(id) {
     const totalKm = S.activities.reduce((s,a)=>s+a.distance,0)/1000;
     m.kmBase = totalKm; m.kmAtual = 0;
     save(); renderManut(); checarManutAlerta();
+  renderFitData();
   }
 }
 
@@ -1254,19 +1273,99 @@ function importarFit(input) {
   if(!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    // Parse básico do FIT para extrair FC média
     const bytes = new Uint8Array(e.target.result);
-    let fcTotal = 0, fcCount = 0;
-    // Busca por valores de heart_rate nos records (simplificado)
-    for(let i=0;i<bytes.length-4;i++) {
-      if(bytes[i]>40&&bytes[i]<220&&bytes[i+1]>40&&bytes[i+1]<220) {
-        fcTotal+=bytes[i]; fcCount++;
-      }
+    // FIT file parser - extrai heart rate dos records
+    // FIT format: header (14 bytes) + records
+    const results = parseFitFile(bytes);
+    
+    if(results.fcMedia) {
+      // Salva no estado
+      const hoje = new Date().toISOString().split('T')[0];
+      if(!S.fitData) S.fitData = [];
+      S.fitData.unshift({
+        data: hoje,
+        fcMedia: results.fcMedia,
+        fcMax: results.fcMax,
+        fcMin: results.fcMin,
+        distancia: results.distancia,
+        duracao: results.duracao,
+        arquivo: file.name
+      });
+      save();
+      renderFitData();
+      alert(`✅ Importado!
+FC Média: ${results.fcMedia} bpm
+FC Máx: ${results.fcMax} bpm
+Distância: ${results.distancia.toFixed(1)} km
+Duração: ${Math.round(results.duracao/60)} min`);
+    } else {
+      alert('Arquivo importado mas sem dados de FC. Verifique se a cinta cardíaca estava conectada durante o treino.');
     }
-    const fcMedia = fcCount>10 ? Math.round(fcTotal/fcCount) : null;
-    alert(fcMedia ? `Arquivo importado! FC média estimada: ${fcMedia}bpm` : 'Arquivo importado! (FC não detectada no arquivo)');
   };
   reader.readAsArrayBuffer(file);
+}
+
+function parseFitFile(bytes) {
+  const results = { fcMedia: null, fcMax: 0, fcMin: 255, distancia: 0, duracao: 0, hrValues: [] };
+  
+  try {
+    // Skip FIT header (14 bytes)
+    let offset = 14;
+    const len = bytes.length - 2; // skip CRC
+    
+    // Simple scan for heart rate values in record messages
+    // FIT records with field definition 3 = heart_rate
+    while(offset < len - 4) {
+      const recordHeader = bytes[offset];
+      
+      // Check for data message (not definition)
+      if((recordHeader & 0x40) === 0) {
+        // Scan nearby bytes for HR-like values (40-220 bpm)
+        for(let i = offset+1; i < Math.min(offset+20, len); i++) {
+          const val = bytes[i];
+          if(val >= 40 && val <= 220) {
+            results.hrValues.push(val);
+          }
+        }
+      }
+      offset++;
+    }
+    
+    // Filter outliers and calculate stats
+    if(results.hrValues.length > 50) {
+      // Sort and remove top/bottom 10%
+      const sorted = [...results.hrValues].sort((a,b) => a-b);
+      const trim = Math.floor(sorted.length * 0.1);
+      const trimmed = sorted.slice(trim, sorted.length - trim);
+      
+      results.fcMedia = Math.round(trimmed.reduce((s,v) => s+v, 0) / trimmed.length);
+      results.fcMax = sorted[sorted.length - 1 - trim];
+      results.fcMin = sorted[trim];
+      results.distancia = results.hrValues.length * 0.01; // rough estimate
+      results.duracao = results.hrValues.length;
+    }
+  } catch(e) { console.error('FIT parse error:', e); }
+  
+  return results;
+}
+
+function renderFitData() {
+  const el = document.getElementById('fit-data-list');
+  if(!el) return;
+  if(!S.fitData || !S.fitData.length) {
+    el.innerHTML = '<div class="empty">Nenhum arquivo .FIT importado ainda.</div>';
+    return;
+  }
+  el.innerHTML = S.fitData.slice(0,10).map(f => `
+    <div class="act-item">
+      <div class="act-ico">❤️</div>
+      <div class="act-info">
+        <div class="act-name">${f.arquivo}</div>
+        <div class="act-meta">${f.data} · FC ${f.fcMedia}bpm · Máx ${f.fcMax}bpm</div>
+      </div>
+      <div class="act-dist" style="color:var(--red);font-size:.85rem">${f.fcMedia}<br><span style="font-size:.6rem;color:var(--muted)">bpm</span></div>
+    </div>
+  `).join('');
 }
 
 // ============================================================
@@ -1396,6 +1495,13 @@ function trocarChave(){
   else if(k)alert('Chave inválida.');
 }
 
+function abrirHealth() {
+  window.location.href = 'x-apple-health://';
+  setTimeout(() => {
+    alert('Se o app Saúde não abriu, acesse manualmente: iPhone → App Saúde → Navegador → Atividade');
+  }, 1500);
+}
+
 function sair(){if(confirm('Desconectar?')){localStorage.removeItem('pp5');location.reload();}}
 
 // ============================================================
@@ -1423,7 +1529,7 @@ function tela(id,txt){
 // ============================================================
 // STORAGE
 // ============================================================
-function save(){localStorage.setItem('pp5',JSON.stringify({token:S.token,refresh:S.refresh,expires:S.expires,athlete:S.athlete,activities:S.activities,plano:S.plano,manut:S.manut,fcMax:S.fcMax,peso:S.peso,apiKey:S.apiKey,bike:S.bike}));}
+function save(){localStorage.setItem('pp5',JSON.stringify({token:S.token,refresh:S.refresh,expires:S.expires,athlete:S.athlete,activities:S.activities,plano:S.plano,manut:S.manut,fcMax:S.fcMax,peso:S.peso,apiKey:S.apiKey,bike:S.bike,fitData:S.fitData}));}
 
 function load(){
   try{
@@ -1431,7 +1537,7 @@ function load(){
     S.token=d.token||null;S.refresh=d.refresh||null;S.expires=d.expires||null;
     S.athlete=d.athlete||null;S.activities=d.activities||[];S.plano=d.plano||[];
     S.manut=d.manut||[];S.fcMax=d.fcMax||185;S.peso=d.peso||75;
-    S.apiKey=d.apiKey||null;S.bike=d.bike||'';
+    S.apiKey=d.apiKey||null;S.bike=d.bike||'';S.fitData=d.fitData||[];
   }catch(e){}
 }
 

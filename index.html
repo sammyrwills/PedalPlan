@@ -1004,7 +1004,7 @@ Para ${dias} dias inclua proporção correta de descanso. Para intervalados use 
     const r = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},
-      body: JSON.stringify({model:'claude-3-5-sonnet-20241022',max_tokens:3000,messages:[{role:'user',content:prompt}]})
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,messages:[{role:'user',content:prompt}]})
     });
     const d = await r.json();
     if (d.error) throw new Error(d.error.message || JSON.stringify(d.error));
@@ -1094,7 +1094,7 @@ Responda SOMENTE JSON:
     const r = await fetch(PROXY_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-3-5-sonnet-20241022',max_tokens:2000,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})
     });
     const d = await r.json();
     if(d.error) throw new Error(d.error.message);

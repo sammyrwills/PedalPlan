@@ -789,7 +789,7 @@ Para treinos intervalados, inclua o campo intervalos: "4x8min Z4 + 3min recup Z1
 Inclua exatamente 7 dias (seg a dom), com 1-2 dias de descanso.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://pedalplan-proxy.bokimepandtomas.workers.dev', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

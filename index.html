@@ -29,16 +29,13 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.5}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
 
-/* NOISE TEXTURE */
-body::before{content:’’;position:fixed;inset:0;background-image:url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.03’/%3E%3C/svg%3E”);pointer-events:none;z-index:0;opacity:.4}
-
-/* SCREENS */
 .screen{display:none;position:fixed;inset:0;z-index:1;overflow:hidden;flex-direction:column;background:var(–bg)}
 .screen.active{display:flex}
 .screen:not(.active){visibility:hidden;pointer-events:none}
 
-/* ── LOGIN ── */
+/* LOGIN */
 #s-login{align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse at 50% 0%, rgba(255,77,28,0.12) 0%, transparent 60%)}
 .login-wrap{width:100%;max-width:360px;text-align:center}
 .logo-mark{width:56px;height:56px;background:var(–accent);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.6rem}
@@ -50,7 +47,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .s-icon{width:20px;height:20px;fill:#fff;flex-shrink:0}
 .login-note{margin-top:1.5rem;font-size:.72rem;color:var(–muted);line-height:1.7}
 
-/* ── SETUP ── */
+/* SETUP */
 #s-setup{align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
 .setup-wrap{width:100%;max-width:380px}
 .setup-logo{font-family:‘Syne’,sans-serif;font-size:1.6rem;font-weight:900;margin-bottom:.25rem}
@@ -71,13 +68,13 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .btn-s{width:100%;background:transparent;border:1px solid var(–border);border-radius:10px;padding:.75rem;color:var(–muted);font-family:‘DM Sans’,sans-serif;font-size:.85rem;cursor:pointer;margin-top:.5rem;transition:all .2s}
 .btn-s:hover{border-color:var(–accent);color:var(–accent)}
 
-/* ── LOADING ── */
+/* LOADING */
 #s-load{align-items:center;justify-content:center;gap:1rem}
 .spin{width:38px;height:38px;border:3px solid var(–border);border-top-color:var(–accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .load-txt{font-size:.85rem;color:var(–muted)}
 
-/* ── APP — LAYOUT iOS ── */
+/* APP LAYOUT */
 #s-app{background:var(–bg);display:flex;flex-direction:column;position:fixed;inset:0;overflow:hidden}
 .app-head{background:var(–s1);border-bottom:1px solid var(–border);padding:.85rem 1.2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .app-logo{font-family:‘Syne’,sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:-1px}
@@ -87,19 +84,16 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .av img{width:100%;height:100%;object-fit:cover}
 .notif-dot{width:8px;height:8px;background:var(–red);border-radius:50%;display:none}
 .notif-dot.show{display:block}
-/* tabs removed */
-
-.tab{display:none}
 
 .pages{flex:1;overflow:hidden;position:relative;min-height:0}
 .page{display:none;position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.25rem 1.2rem;padding-bottom:calc(90px + env(safe-area-inset-bottom))}
 .page.on{display:block}
 
-/* ── CARDS ── */
+/* CARDS */
 .card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1.2rem;margin-bottom:.85rem}
 .card-lbl{font-family:‘DM Mono’,monospace;font-size:.65rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(–muted);margin-bottom:.75rem}
 
-/* ── STATS GRID ── */
+/* STATS GRID */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:.85rem}
 .sc{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:.9rem;position:relative;overflow:hidden}
 .sc::after{content:’’;position:absolute;top:0;left:0;right:0;height:2px}
@@ -112,18 +106,18 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .sc-unit{font-family:‘DM Mono’,monospace;font-size:.65rem;color:var(–muted)}
 .sc-lbl{font-size:.7rem;color:var(–muted);margin-top:.15rem}
 
-/* ── IA BTN ── */
+/* IA BTN */
 .ia-btn{display:flex;align-items:center;justify-content:center;gap:.6rem;background:linear-gradient(135deg,#ff4d1c,#ff7a4d);border:none;border-radius:var(–r);padding:.95rem 1.5rem;color:#fff;font-family:‘Syne’,sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.02em;text-transform:uppercase;cursor:pointer;width:100%;margin-bottom:.85rem;box-shadow:0 4px 24px rgba(255,77,28,.25);transition:all .2s;position:relative;overflow:hidden}
 .ia-btn::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);pointer-events:none}
 .ia-btn:active{transform:scale(.98)}
 .ia-btn:disabled{opacity:.6;cursor:not-allowed}
 
-/* ── PERÍODO SELECTOR ── */
+/* PERÍODO SELECTOR */
 .period-sel{display:flex;gap:.5rem;margin-bottom:.85rem}
 .period-btn{flex:1;background:var(–s2);border:1px solid var(–border);border-radius:8px;padding:.55rem;color:var(–muted);font-family:‘Syne’,sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;cursor:pointer;text-align:center;transition:all .2s}
 .period-btn.on{background:rgba(255,77,28,.12);border-color:var(–accent);color:var(–accent)}
 
-/* ── IA STATUS ── */
+/* IA STATUS */
 .ia-status-box{background:rgba(0,240,144,.06);border:1px solid rgba(0,240,144,.2);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.85rem}
 .ia-status-lbl{font-family:‘DM Mono’,monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(–green);margin-bottom:.4rem}
 .ia-status-txt{font-size:.8rem;color:var(–muted);line-height:1.6}
@@ -133,7 +127,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .ia-loading-txt{font-size:.82rem;color:var(–muted);line-height:1.6}
 .ia-loading-txt strong{color:var(–accent)}
 
-/* ── TREINO CARD ── */
+/* TREINO CARD */
 .tc{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.6rem;cursor:pointer;transition:border-color .2s}
 .tc:hover{border-color:var(–muted2)}
 .tc.hoje{border-color:var(–accent);background:rgba(255,77,28,.04)}
@@ -156,7 +150,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .fit-btn{display:inline-flex;align-items:center;gap:.35rem;background:var(–s2);border:1px solid var(–border);border-radius:6px;padding:.35rem .65rem;color:var(–muted);font-family:‘DM Mono’,monospace;font-size:.65rem;cursor:pointer;margin-top:.5rem;transition:all .2s}
 .fit-btn:hover{border-color:var(–green);color:var(–green)}
 
-/* ── ATIVIDADES ── */
+/* ATIVIDADES */
 .act-item{display:flex;align-items:center;gap:.9rem;padding:.8rem 0;border-bottom:1px solid var(–border)}
 .act-item:last-child{border:none}
 .act-ico{width:36px;height:36px;background:var(–s2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
@@ -165,7 +159,11 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .act-meta{font-size:.7rem;color:var(–muted);margin-top:.1rem}
 .act-dist{font-family:‘Syne’,sans-serif;font-size:1rem;font-weight:700;color:var(–accent);flex-shrink:0}
 
-/* ── GRÁFICO SIMPLES ── */
+/* DEBRIEF BTN nas rides */
+.debrief-btn{display:inline-flex;align-items:center;gap:.3rem;background:rgba(255,77,28,.1);border:1px solid rgba(255,77,28,.25);border-radius:6px;padding:.3rem .65rem;color:var(–accent);font-family:‘DM Mono’,monospace;font-size:.62rem;cursor:pointer;margin-top:.5rem;transition:all .2s}
+.debrief-btn:active{transform:scale(.96)}
+
+/* CHART */
 .chart-wrap{height:100px;display:flex;align-items:flex-end;gap:4px;padding:.5rem 0}
 .chart-bar{flex:1;background:var(–accent);border-radius:3px 3px 0 0;min-height:3px;transition:height .5s ease;opacity:.8;position:relative}
 .chart-bar:hover{opacity:1}
@@ -173,7 +171,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .chart-lbls{display:flex;gap:4px;margin-top:.3rem}
 .chart-lbl{flex:1;text-align:center;font-family:‘DM Mono’,monospace;font-size:.55rem;color:var(–muted)}
 
-/* ── RP ── */
+/* RP */
 .rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
 .rp-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:.9rem}
 .rp-icon{font-size:1.4rem;margin-bottom:.4rem}
@@ -181,7 +179,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .rp-lbl{font-size:.7rem;color:var(–muted);margin-top:.15rem}
 .rp-data{font-family:‘DM Mono’,monospace;font-size:.62rem;color:var(–muted2);margin-top:.25rem}
 
-/* ── ANÁLISE IA ── */
+/* ANÁLISE IA */
 .analise-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1.1rem 1.2rem;margin-bottom:.65rem}
 .analise-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
 .analise-icon{font-size:1.2rem}
@@ -192,7 +190,7 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .ab-warn{background:rgba(255,213,77,.12);color:var(–yellow)}
 .ab-bad{background:rgba(255,77,77,.12);color:var(–red)}
 
-/* ── MANUTENÇÃO ── */
+/* MANUTENÇÃO */
 .manut-item{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.65rem}
 .manut-head{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
 .manut-icon{font-size:1.3rem;flex-shrink:0}
@@ -210,20 +208,20 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .manut-btn{font-family:‘DM Mono’,monospace;font-size:.65rem;background:var(–s2);border:1px solid var(–border);border-radius:6px;padding:.3rem .65rem;color:var(–muted);cursor:pointer;transition:all .2s}
 .manut-btn:hover{border-color:var(–green);color:var(–green)}
 
-/* ── ZONES ── */
+/* ZONES */
 .zone-row{display:flex;align-items:center;gap:.65rem;margin-bottom:.4rem}
 .zone-lbl{font-family:‘DM Mono’,monospace;font-size:.65rem;width:54px;color:var(–muted)}
 .zone-bar-wrap{flex:1;height:5px;background:var(–s2);border-radius:3px;overflow:hidden}
 .zone-bar{height:100%;border-radius:3px;transition:width .8s ease}
 .zone-pct{font-family:‘DM Mono’,monospace;font-size:.65rem;width:28px;text-align:right;color:var(–muted)}
 
-/* ── PROXIMO ── */
+/* PRÓXIMO */
 .prox-card{background:linear-gradient(135deg,rgba(255,77,28,.1),rgba(255,122,77,.05));border:1px solid rgba(255,77,28,.25);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.85rem}
 .prox-lbl{font-family:‘DM Mono’,monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(–accent);margin-bottom:.4rem}
 .prox-nome{font-family:‘Syne’,sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:-.5px;margin-bottom:.25rem}
 .prox-desc{font-size:.78rem;color:var(–muted);line-height:1.5}
 
-/* ── ADERÊNCIA ── */
+/* ADERÊNCIA */
 .ader-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.85rem}
 .ader-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem}
 .ader-lbl{font-size:.8rem;color:var(–muted)}
@@ -231,7 +229,30 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .ader-bar{height:6px;background:var(–s2);border-radius:3px;overflow:hidden;margin-top:.5rem}
 .ader-fill{height:100%;border-radius:3px;transition:width .8s ease}
 
-/* ── PERFIL ── */
+/* TRAINING STATUS (novo) */
+.ts-card{background:var(–card);border:1px solid var(–border);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.85rem;position:relative;overflow:hidden}
+.ts-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–blue),var(–purple))}
+.ts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-top:.6rem}
+.ts-item{text-align:center;padding:.6rem .3rem;background:var(–s2);border-radius:8px}
+.ts-val{font-family:‘Syne’,sans-serif;font-size:1.4rem;font-weight:900;line-height:1}
+.ts-lbl{font-family:‘DM Mono’,monospace;font-size:.55rem;color:var(–muted);margin-top:.2rem;text-transform:uppercase;letter-spacing:.05em}
+.ts-status{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding:.6rem .8rem;background:var(–s2);border-radius:8px}
+.ts-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ts-status-txt{font-size:.78rem;color:var(–muted)}
+.ts-status-label{font-family:‘DM Mono’,monospace;font-size:.65rem;font-weight:500;margin-left:auto}
+
+/* FTP CARD (novo) */
+.ftp-card{background:linear-gradient(135deg,rgba(77,159,255,.08),rgba(168,85,247,.05));border:1px solid rgba(77,159,255,.2);border-radius:var(–r);padding:1rem 1.2rem;margin-bottom:.85rem}
+.ftp-row{display:flex;align-items:center;justify-content:space-between}
+.ftp-main{font-family:‘Syne’,sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:-2px;color:var(–blue)}
+.ftp-unit{font-family:‘DM Mono’,monospace;font-size:.7rem;color:var(–muted);margin-left:.3rem;align-self:flex-end;padding-bottom:.3rem}
+.ftp-wkg{font-family:‘Syne’,sans-serif;font-size:1rem;font-weight:700;color:var(–purple)}
+.ftp-lbl{font-family:‘DM Mono’,monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(–blue);margin-bottom:.5rem}
+.ftp-metas{margin-top:.75rem;display:flex;flex-direction:column;gap:.35rem}
+.ftp-meta-row{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(–muted)}
+.ftp-meta-row::before{content:’—’;color:var(–muted2)}
+
+/* PERFIL */
 .cfg-sec{margin-bottom:1.4rem}
 .cfg-lbl{font-family:‘DM Mono’,monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(–muted);margin-bottom:.65rem;padding-bottom:.45rem;border-bottom:1px solid var(–border)}
 .cfg-row{display:flex;align-items:center;justify-content:space-between;padding:.72rem 0;border-bottom:1px solid var(–border)}
@@ -244,55 +265,19 @@ body::before{content:’’;position:fixed;inset:0;background-image:url(“data:
 .cfg-input{background:var(–s2);border:1px solid var(–border);border-radius:7px;padding:.3rem .6rem;color:var(–text);font-family:‘DM Mono’,monospace;font-size:.8rem;outline:none;text-align:center;width:75px;-webkit-appearance:none}
 .cfg-input:focus{border-color:var(–accent)}
 
-/* ── FAB ── */
+/* FAB */
 .fab{position:fixed;bottom:calc(70px + env(safe-area-inset-bottom));right:1.2rem;width:50px;height:50px;background:var(–accent);border:none;border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,77,28,.4);z-index:50;transition:transform .2s}
 .fab:active{transform:scale(.9)}
 
-/* ── BOTTOM NAV — PROFISSIONAL iOS ── */
-.bot-nav{
-position:fixed;bottom:0;left:0;right:0;
-background:rgba(15,15,26,0.95);
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-border-top:1px solid var(–border);
-display:flex;
-z-index:100;
-padding-bottom:env(safe-area-inset-bottom);
-height:calc(58px + env(safe-area-inset-bottom));
-align-items:stretch;
-}
-.nav-b{
-flex:1;
-background:none;border:none;
-color:var(–muted);
-padding:.5rem .25rem;
-padding-bottom:0;
-cursor:pointer;
-display:flex;flex-direction:column;align-items:center;justify-content:center;
-gap:.18rem;
-transition:all .2s;
-position:relative;
-min-width:0;
-}
+/* BOTTOM NAV */
+.bot-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,26,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(–border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);height:calc(58px + env(safe-area-inset-bottom));align-items:stretch}
+.nav-b{flex:1;background:none;border:none;color:var(–muted);padding:.5rem .25rem;padding-bottom:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.18rem;transition:all .2s;position:relative;min-width:0}
 .nav-b.on{color:var(–accent)}
-.nav-b.on::before{
-content:’’;
-position:absolute;top:0;left:50%;transform:translateX(-50%);
-width:24px;height:2px;
-background:var(–accent);
-border-radius:0 0 2px 2px;
-}
+.nav-b.on::before{content:’’;position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:2px;background:var(–accent);border-radius:0 0 2px 2px}
 .nav-ico{font-size:1.2rem;line-height:1;flex-shrink:0}
-.nav-lbl{
-font-family:‘DM Mono’,monospace;
-font-size:.5rem;
-letter-spacing:.03em;
-text-transform:uppercase;
-white-space:nowrap;
-line-height:1;
-}
+.nav-lbl{font-family:‘DM Mono’,monospace;font-size:.5rem;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;line-height:1}
 
-/* ── MODAL ── */
+/* MODAL */
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:flex-end}
 .mo.open{display:flex}
 .mo-box{background:var(–s1);border-top:1px solid var(–border);border-radius:16px 16px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:1.25rem 1.2rem 2rem;animation:up .3s ease}
@@ -308,11 +293,20 @@ line-height:1;
 .tipo-b{background:var(–s2);border:1px solid var(–border);border-radius:8px;padding:.55rem .4rem;color:var(–muted);font-family:‘Syne’,sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:all .2s;text-align:center}
 .tipo-b.on{border-color:var(–accent);color:var(–accent);background:rgba(255,77,28,.08)}
 
-/* ── SEMANA LABEL ── */
+/* SEMANA LABEL */
 .wk-lbl{font-family:‘DM Mono’,monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(–muted);margin:1.2rem 0 .6rem}
 .wk-lbl:first-child{margin-top:0}
 
-/* ── MISC ── */
+/* DEBRIEF MODAL */
+.debrief-content{font-size:.82rem;color:var(–muted);line-height:1.7}
+.debrief-section{margin-bottom:1rem}
+.debrief-section-title{font-family:‘Syne’,sans-serif;font-size:.85rem;font-weight:700;color:var(–text);margin-bottom:.35rem}
+.debrief-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.debrief-metric{background:var(–s2);border-radius:8px;padding:.6rem .75rem}
+.debrief-metric-val{font-family:‘Syne’,sans-serif;font-size:1.2rem;font-weight:900}
+.debrief-metric-lbl{font-family:‘DM Mono’,monospace;font-size:.58rem;color:var(–muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* MISC */
 .empty{text-align:center;padding:2.5rem 1rem;color:var(–muted);font-size:.82rem;line-height:1.7}
 .il{display:flex;align-items:center;gap:.5rem;color:var(–muted);font-size:.78rem;padding:.75rem 0}
 .ils{width:15px;height:15px;border:2px solid var(–border);border-top-color:var(–accent);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
@@ -346,7 +340,7 @@ line-height:1;
     <p class="setup-sub">Chave da Anthropic para gerar treinos personalizados. Fica salva só no seu iPhone.</p>
     <div class="steps-box">
       <div class="step-row"><div class="step-n">1</div><div>Acessa <strong>console.anthropic.com</strong></div></div>
-      <div class="step-row"><div class="step-n">2</div><div>API Keys → Create Key</div></div>
+      <div class="step-row"><div class="step-n">2</div><div>API Keys → Criar chave</div></div>
       <div class="step-row"><div class="step-n">3</div><div>Copia a chave <strong>sk-ant-...</strong></div></div>
     </div>
     <div class="fg"><label>Chave API Anthropic</label><input type="password" id="inp-key" placeholder="sk-ant-api03-..."></div>
@@ -354,6 +348,7 @@ line-height:1;
       <div class="fi"><label>FC Máxima</label><input type="number" id="inp-fc" value="185" placeholder="185"></div>
       <div class="fi"><label>Peso (kg)</label><input type="number" id="inp-peso" value="75" placeholder="75"></div>
     </div>
+    <div class="fg"><label>FTP estimado (Watts) — opcional</label><input type="number" id="inp-ftp" value="200" placeholder="200"></div>
     <div class="fg"><label>Bicicleta</label><input type="text" id="inp-bike" placeholder="Ex: Trek FX 3, Caloi Elite Carbon..."></div>
     <button class="btn-p" onclick="salvarSetup()">Começar 🚴</button>
     <button class="btn-s" onclick="pularSetup()">Configurar depois</button>
@@ -384,6 +379,7 @@ line-height:1;
 <!-- DASHBOARD -->
 <div class="page on" id="p-dash">
   <div id="prox-wrap"></div>
+  <div id="ts-wrap"></div>
   <div id="ader-wrap"></div>
 
   <button class="ia-btn" id="btn-ia" onclick="abrirModalIA()">
@@ -429,7 +425,7 @@ line-height:1;
   </div>
 </div>
 
-<!-- RIDES -->
+<!-- RIDES + DEBRIEF -->
 <div class="page" id="p-rides">
   <div class="card" style="margin-bottom:.85rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
@@ -451,12 +447,6 @@ line-height:1;
       </label>
     </div>
     <div id="fit-data-list"><div class="empty" style="padding:.75rem 0;font-size:.78rem">Importa um .FIT do iGPSPORT para ver seus batimentos reais.</div></div>
-  </div>
-
-  <div class="card" style="margin-bottom:.85rem">
-    <div class="card-lbl">🍎 Apple Health</div>
-    <div style="font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">O app iGPSPORT sincroniza FC com o Apple Health automaticamente. Ative nas configurações do iGPSPORT → Saúde.</div>
-    <button class="btn-p" style="font-size:.8rem;padding:.7rem" onclick="abrirHealth()">Abrir app Saúde</button>
   </div>
 
   <div class="card">
@@ -512,12 +502,45 @@ line-height:1;
         <span class="cfg-val">kg</span>
       </div>
     </div>
+    <div class="cfg-row">
+      <span class="cfg-key">FTP</span>
+      <div style="display:flex;align-items:center;gap:.4rem">
+        <input type="number" class="cfg-input" id="cfg-ftp" value="200">
+        <span class="cfg-val">W</span>
+      </div>
+    </div>
     <div class="cfg-row"><span class="cfg-key">Z1 Recup.</span><span class="cfg-val" id="z1">—</span></div>
     <div class="cfg-row"><span class="cfg-key">Z2 Aerób.</span><span class="cfg-val" id="z2">—</span></div>
     <div class="cfg-row"><span class="cfg-key">Z3 Tempo</span><span class="cfg-val" id="z3">—</span></div>
     <div class="cfg-row"><span class="cfg-key">Z4 Limiar</span><span class="cfg-val" id="z4">—</span></div>
     <div class="cfg-row"><span class="cfg-key">Z5 VO2</span><span class="cfg-val" id="z5">—</span></div>
     <button class="btn-p" style="margin-top:.75rem" onclick="salvarCfg()">Salvar</button>
+  </div>
+
+  <div class="cfg-sec">
+    <div class="cfg-lbl">Metas do atleta</div>
+    <div class="fg"><label>Objetivo principal</label>
+      <select id="cfg-objetivo">
+        <option value="resistencia">Melhorar resistência e fundo</option>
+        <option value="velocidade">Ganhar velocidade e sprint</option>
+        <option value="forca">Força e subidas</option>
+        <option value="emagrecimento">Emagrecimento</option>
+        <option value="competicao">Competição / prova</option>
+        <option value="saude">Saúde e bem-estar</option>
+      </select>
+    </div>
+    <div class="fg"><label>Periodização preferida</label>
+      <select id="cfg-period">
+        <option value="tradicional">Tradicional (volume → intensidade)</option>
+        <option value="polarizado">Polarizado (80% leve / 20% intenso)</option>
+        <option value="sweetspot">Sweet Spot (foco no limiar)</option>
+        <option value="base">Base aeróbica (Z2 dominante)</option>
+      </select>
+    </div>
+    <div class="fg"><label>Observações / restrições</label>
+      <textarea id="cfg-obs" placeholder="Ex: joelho direito fraco, disponível seg/qua/sex/sáb, prova em 2 meses..."></textarea>
+    </div>
+    <button class="btn-p" onclick="salvarCfg()">Salvar metas</button>
   </div>
 
   <div class="cfg-sec">
@@ -537,13 +560,13 @@ line-height:1;
 <button class="fab" onclick="abrirModal()">+</button>
 
   <nav class="bot-nav">
-    <button class="nav-b on" onclick="pg('dash',null,this)"><div class="nav-ico">📊</div><div class="nav-lbl">Dash</div></button>
-    <button class="nav-b" onclick="pg('plano',null,this)"><div class="nav-ico">📅</div><div class="nav-lbl">Plano</div></button>
-    <button class="nav-b" onclick="pg('prog',null,this)"><div class="nav-ico">📈</div><div class="nav-lbl">Progresso</div></button>
-    <button class="nav-b" onclick="pg('rides',null,this)"><div class="nav-ico">🚴</div><div class="nav-lbl">Rides</div></button>
-    <button class="nav-b" onclick="pg('analise',null,this)"><div class="nav-ico">🤖</div><div class="nav-lbl">IA</div></button>
-    <button class="nav-b" onclick="pg('manut',null,this)"><div class="nav-ico">🔧</div><div class="nav-lbl">Manutenção</div></button>
-    <button class="nav-b" onclick="pg('perfil',null,this)"><div class="nav-ico">👤</div><div class="nav-lbl">Perfil</div></button>
+    <button class="nav-b on" onclick="pg('dash',this)"><div class="nav-ico">📊</div><div class="nav-lbl">Dash</div></button>
+    <button class="nav-b" onclick="pg('plano',this)"><div class="nav-ico">📅</div><div class="nav-lbl">Plano</div></button>
+    <button class="nav-b" onclick="pg('prog',this)"><div class="nav-ico">📈</div><div class="nav-lbl">Progresso</div></button>
+    <button class="nav-b" onclick="pg('rides',this)"><div class="nav-ico">🚴</div><div class="nav-lbl">Rides</div></button>
+    <button class="nav-b" onclick="pg('analise',this)"><div class="nav-ico">🤖</div><div class="nav-lbl">IA</div></button>
+    <button class="nav-b" onclick="pg('manut',this)"><div class="nav-ico">🔧</div><div class="nav-lbl">Manutenção</div></button>
+    <button class="nav-b" onclick="pg('perfil',this)"><div class="nav-ico">👤</div><div class="nav-lbl">Perfil</div></button>
   </nav>
 </div>
 
@@ -625,9 +648,22 @@ line-height:1;
       </select>
     </div>
     <div class="fg"><label>Trocar a cada (km)</label><input type="number" id="m-km" placeholder="Ex: 1500" value="1500"></div>
-    <div class="fg"><label>KM atual do componente (km já rodados)</label><input type="number" id="m-km-atual" placeholder="Ex: 0" value="0"></div>
+    <div class="fg"><label>KM atual do componente</label><input type="number" id="m-km-atual" placeholder="Ex: 0" value="0"></div>
     <button class="btn-p" onclick="salvarManut()">Salvar</button>
     <button class="btn-s" onclick="fecharModal('mo-manut')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL DEBRIEF -->
+
+<div class="mo" id="mo-debrief">
+  <div class="mo-box">
+    <div class="mo-handle"></div>
+    <div class="mo-title" id="debrief-titulo">Análise da Ride</div>
+    <div id="debrief-body">
+      <div class="ia-loading"><div class="spin"></div><div class="ia-loading-txt"><strong>IA analisando sua pedalada...</strong></div></div>
+    </div>
+    <button class="btn-s" onclick="fecharModal('mo-debrief')" style="margin-top:1rem">Fechar</button>
   </div>
 </div>
 
@@ -648,9 +684,10 @@ let S = {
   token: null, refresh: null, expires: null,
   athlete: null, activities: [],
   plano: [], manut: [],
-  fcMax: 185, peso: 75,
+  fcMax: 185, peso: 75, ftp: 200,
   apiKey: null, bike: '',
-  periodo: 7, fitData: []
+  periodo: 7, fitData: [],
+  objetivo: 'resistencia', periodizacao: 'polarizado', obsAtleta: ''
 };
 
 // ============================================================
@@ -717,6 +754,7 @@ function salvarSetup() {
   S.apiKey = k;
   S.fcMax  = parseInt(document.getElementById('inp-fc').value) || 185;
   S.peso   = parseInt(document.getElementById('inp-peso').value) || 75;
+  S.ftp    = parseInt(document.getElementById('inp-ftp').value) || 200;
   S.bike   = document.getElementById('inp-bike').value.trim();
   save(); boot();
 }
@@ -752,6 +790,7 @@ async function boot() {
   calcProgressos();
   calcRPs();
   calcAderencia();
+  calcTrainingStatus();
   checarManutAlerta();
   renderFitData();
 }
@@ -767,12 +806,25 @@ function renderPerfil() {
   document.getElementById('cfg-cidade').textContent = S.athlete?.city || S.athlete?.country || '—';
   document.getElementById('cfg-fc').value = S.fcMax;
   document.getElementById('cfg-peso').value = S.peso;
+  document.getElementById('cfg-ftp').value = S.ftp || 200;
   document.getElementById('cfg-bike').textContent = S.bike || '—';
   const total = S.activities.reduce((a,x)=>a+x.distance,0)/1000;
   document.getElementById('cfg-km-total').textContent = total > 0 ? `${total.toFixed(0)} km` : '—';
   const ia = document.getElementById('cfg-ia');
   if (S.apiKey) { ia.textContent='● ATIVO'; ia.className='tag tag-ok'; }
   else { ia.textContent='○ NÃO CONFIG'; ia.className='tag'; ia.style.background='rgba(90,90,122,.12)'; ia.style.color='var(--muted)'; }
+  if (S.objetivo) {
+    const sel = document.getElementById('cfg-objetivo');
+    if (sel) sel.value = S.objetivo;
+  }
+  if (S.periodizacao) {
+    const sel = document.getElementById('cfg-period');
+    if (sel) sel.value = S.periodizacao;
+  }
+  if (S.obsAtleta) {
+    const ta = document.getElementById('cfg-obs');
+    if (ta) ta.value = S.obsAtleta;
+  }
 }
 
 // ============================================================
@@ -803,15 +855,319 @@ function renderRides() {
     const dt = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
     const fc = a.average_heartrate ? `FC ${Math.round(a.average_heartrate)}bpm · ` : '';
     const elev = a.total_elevation_gain>5 ? `↑${Math.round(a.total_elevation_gain)}m` : '';
-    return `<div class="act-item">
-      <div class="act-ico">🚴</div>
-      <div class="act-info">
-        <div class="act-name">${a.name}</div>
-        <div class="act-meta">${dt} · ${min}min · ${fc}${elev}</div>
+    const tss = calcTSS(a);
+    const tssStr = tss ? ` · TSS ${tss}` : '';
+    return `<div>
+      <div class="act-item">
+        <div class="act-ico">🚴</div>
+        <div class="act-info">
+          <div class="act-name">${a.name}</div>
+          <div class="act-meta">${dt} · ${min}min · ${fc}${elev}${tssStr}</div>
+        </div>
+        <div class="act-dist">${km}km</div>
       </div>
-      <div class="act-dist">${km}km</div>
+      <div style="padding-bottom:.5rem">
+        <button class="debrief-btn" onclick="abrirDebrief(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+          🤖 Debrief da ride
+        </button>
+      </div>
     </div>`;
   }).join('');
+}
+
+// ============================================================
+// MÉTRICAS AVANÇADAS (TSS, IF, NP estimados via FC)
+// ============================================================
+function calcTSS(atividade) {
+  if (!atividade.average_heartrate || !atividade.moving_time) return null;
+  const ftp = S.ftp || 200;
+  const fcMax = S.fcMax || 185;
+  // Estimar intensidade relativa via FC (proxy sem potenciômetro)
+  const fcReserva = fcMax - 60; // FC repouso estimada em 60
+  const fcLimiar = 60 + fcReserva * 0.87; // ~87% FC reserva = limiar
+  const if_est = Math.min(atividade.average_heartrate / fcLimiar, 1.1);
+  const tss = Math.round((atividade.moving_time / 3600) * if_est * if_est * 100);
+  return tss;
+}
+
+function calcIF(atividade) {
+  if (!atividade.average_heartrate) return null;
+  const fcMax = S.fcMax || 185;
+  const fcLimiar = fcMax * 0.87;
+  return Math.min((atividade.average_heartrate / fcLimiar), 1.1).toFixed(2);
+}
+
+// ============================================================
+// TRAINING STATUS (forma, fadiga, carga) — novo
+// ============================================================
+function calcTrainingStatus() {
+  const agora = Date.now();
+
+  // CTL = Chronic Training Load (forma — últimas 6 semanas)
+  // ATL = Acute Training Load (fadiga — última semana)
+  // TSB = Training Stress Balance (forma - fadiga)
+  const ativs42 = S.activities.filter(a => {
+    const d = new Date(a.start_date_local);
+    return (agora - d.getTime()) < 42 * 86400000;
+  });
+  const ativs7 = S.activities.filter(a => {
+    const d = new Date(a.start_date_local);
+    return (agora - d.getTime()) < 7 * 86400000;
+  });
+
+  const tss42 = ativs42.reduce((s,a) => s + (calcTSS(a)||0), 0);
+  const tss7  = ativs7.reduce((s,a) => s + (calcTSS(a)||0), 0);
+
+  const ctl = Math.round(tss42 / 42); // pontos/dia
+  const atl = Math.round(tss7 / 7);
+  const tsb = ctl - atl;
+
+  // Status
+  let status, statusCor, statusTxt;
+  if (!ativs42.length) {
+    status = 'Sem dados'; statusCor = 'var(--muted)';
+    statusTxt = 'Conecte o Strava e registre atividades para ver seu status.';
+  } else if (tsb > 10) {
+    status = 'Em forma'; statusCor = 'var(--green)';
+    statusTxt = 'Descansado e pronto para esforço — ótimo dia para treino intenso.';
+  } else if (tsb >= -10) {
+    status = 'Mantendo'; statusCor = 'var(--blue)';
+    statusTxt = 'Equilíbrio entre treino e recuperação. Continue o plano normalmente.';
+  } else if (tsb >= -25) {
+    status = 'Acumulando carga'; statusCor = 'var(--yellow)';
+    statusTxt = 'Fadiga crescente — planeje um treino mais leve ou descanso.';
+  } else {
+    status = 'Sobrecarga'; statusCor = 'var(--red)';
+    statusTxt = 'Fadiga elevada! Priorize recuperação ativa ou descanso completo.';
+  }
+
+  const el = document.getElementById('ts-wrap');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="ts-card" style="margin-bottom:.85rem">
+      <div class="card-lbl" style="margin-bottom:.4rem">📊 Status de treino</div>
+      <div class="ts-grid">
+        <div class="ts-item">
+          <div class="ts-val" style="color:var(--blue)">${ctl}</div>
+          <div class="ts-lbl">Forma (CTL)</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-val" style="color:var(--yellow)">${atl}</div>
+          <div class="ts-lbl">Fadiga (ATL)</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-val" style="color:${tsb>=0?'var(--green)':'var(--red)'}">${tsb>0?'+':''}${tsb}</div>
+          <div class="ts-lbl">Equilíbrio</div>
+        </div>
+      </div>
+      <div class="ts-status">
+        <div class="ts-status-dot" style="background:${statusCor}"></div>
+        <div class="ts-status-txt">${statusTxt}</div>
+        <div class="ts-status-label" style="color:${statusCor}">${status}</div>
+      </div>
+    </div>`;
+
+  // FTP card no dashboard
+  const ftpKg = (S.ftp / S.peso).toFixed(1);
+  // Calcular w/kg categoria
+  let categoria = '';
+  const wkg = S.ftp / S.peso;
+  if (wkg >= 5.0) categoria = 'Elite';
+  else if (wkg >= 4.0) categoria = 'Avançado';
+  else if (wkg >= 3.0) categoria = 'Intermediário';
+  else if (wkg >= 2.0) categoria = 'Iniciante';
+  else categoria = 'Iniciando';
+
+  // Injeta card de FTP antes do ts-wrap
+  let ftpEl = document.getElementById('ftp-dash-card');
+  if (!ftpEl) {
+    ftpEl = document.createElement('div');
+    ftpEl.id = 'ftp-dash-card';
+    el.parentNode.insertBefore(ftpEl, el);
+  }
+  ftpEl.innerHTML = `
+    <div class="ftp-card">
+      <div class="ftp-lbl">⚡ FTP estimado</div>
+      <div class="ftp-row">
+        <div>
+          <span class="ftp-main">${S.ftp}</span>
+          <span class="ftp-unit">W</span>
+        </div>
+        <div style="text-align:right">
+          <div class="ftp-wkg">${ftpKg} W/kg</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.15rem">${categoria}</div>
+        </div>
+      </div>
+      <div class="ftp-metas">
+        <div class="ftp-meta-row">Z2 (aeróbico): ${Math.round(S.ftp*0.56)}–${Math.round(S.ftp*0.75)}W</div>
+        <div class="ftp-meta-row">Sweet spot: ${Math.round(S.ftp*0.88)}–${Math.round(S.ftp*0.94)}W</div>
+        <div class="ftp-meta-row">Limiar (Z4): ${Math.round(S.ftp*0.95)}–${Math.round(S.ftp*1.05)}W</div>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// DEBRIEF DA RIDE (novo — como o RestOrTrain)
+// ============================================================
+async function abrirDebrief(atividade) {
+  if (!S.apiKey) { alert('Configure a chave da IA no Perfil!'); return; }
+
+  document.getElementById('mo-debrief').classList.add('open');
+  document.getElementById('debrief-titulo').textContent = atividade.name;
+
+  const km = (atividade.distance/1000).toFixed(1);
+  const min = Math.round(atividade.moving_time/60);
+  const vel = atividade.average_speed ? ((atividade.average_speed)*3.6).toFixed(1) : null;
+  const fc = atividade.average_heartrate ? Math.round(atividade.average_heartrate) : null;
+  const fcMax = atividade.max_heartrate || null;
+  const elev = Math.round(atividade.total_elevation_gain||0);
+  const tss = calcTSS(atividade);
+  const ifVal = calcIF(atividade);
+  const data = (atividade.start_date_local||'').split('T')[0];
+
+  // Mostrar métricas imediatamente enquanto IA processa
+  document.getElementById('debrief-body').innerHTML = `
+    <div class="debrief-metrics">
+      <div class="debrief-metric">
+        <div class="debrief-metric-val" style="color:var(--accent)">${km}</div>
+        <div class="debrief-metric-lbl">km</div>
+      </div>
+      <div class="debrief-metric">
+        <div class="debrief-metric-val" style="color:var(--blue)">${min}</div>
+        <div class="debrief-metric-lbl">minutos</div>
+      </div>
+      <div class="debrief-metric">
+        <div class="debrief-metric-val" style="color:var(--green)">${vel||'—'}</div>
+        <div class="debrief-metric-lbl">km/h médio</div>
+      </div>
+      <div class="debrief-metric">
+        <div class="debrief-metric-val" style="color:var(--red)">${fc||'—'}</div>
+        <div class="debrief-metric-lbl">FC média (bpm)</div>
+      </div>
+      ${fcMax?`<div class="debrief-metric"><div class="debrief-metric-val" style="color:var(--red)">${fcMax}</div><div class="debrief-metric-lbl">FC máx (bpm)</div></div>`:''}
+      <div class="debrief-metric">
+        <div class="debrief-metric-val" style="color:var(--yellow)">${elev}</div>
+        <div class="debrief-metric-lbl">elevação (m)</div>
+      </div>
+      ${tss?`<div class="debrief-metric"><div class="debrief-metric-val" style="color:var(--purple)">${tss}</div><div class="debrief-metric-lbl">TSS estimado</div></div>`:''}
+      ${ifVal?`<div class="debrief-metric"><div class="debrief-metric-val" style="color:var(--blue)">${ifVal}</div><div class="debrief-metric-lbl">Fator intensidade</div></div>`:''}
+    </div>
+    <div class="ia-loading" style="margin-top:.5rem"><div class="spin"></div><div class="ia-loading-txt"><strong>IA analisando sua pedalada...</strong></div></div>`;
+
+  const prompt = `Você é um treinador de ciclismo especialista em análise de performance. Faça um debrief detalhado desta pedalada.
+
+DADOS DA RIDE:
+- Nome: ${atividade.name}
+- Data: ${data}
+- Distância: ${km} km
+- Duração: ${min} min
+- Velocidade média: ${vel||'sem dado'} km/h
+- FC média: ${fc||'sem dado'} bpm
+- FC máxima: ${fcMax||'sem dado'} bpm
+- Elevação: ${elev} m
+- TSS estimado: ${tss||'sem dado'}
+- Fator de intensidade: ${ifVal||'sem dado'}
+
+PERFIL DO ATLETA:
+- FC máxima: ${S.fcMax} bpm
+- FTP estimado: ${S.ftp} W
+- Peso: ${S.peso} kg
+- FTP/kg: ${(S.ftp/S.peso).toFixed(1)} W/kg
+- Objetivo: ${S.objetivo||'resistência'}
+- Periodização: ${S.periodizacao||'polarizado'}
+
+ZONAS FC (referência):
+Z1 < ${Math.round(S.fcMax*.6)} | Z2 ${Math.round(S.fcMax*.6)}-${Math.round(S.fcMax*.7)} | Z3 ${Math.round(S.fcMax*.7)}-${Math.round(S.fcMax*.8)} | Z4 ${Math.round(S.fcMax*.8)}-${Math.round(S.fcMax*.9)} | Z5 > ${Math.round(S.fcMax*.9)}
+
+Responda SOMENTE em JSON válido sem markdown:
+{
+  "classificacao": "Treino de qualidade (Z2, Intervalado, Longão, Recuperação, etc)",
+  "resumo": "análise geral da pedalada em 2-3 frases, mencione os dados específicos",
+  "pontos_chave": [
+    {"label": "Rótulo curto", "valor": "dado específico", "avaliacao": "positivo|neutro|negativo", "detalhe": "explicação"}
+  ],
+  "zona_predominante": "Z2",
+  "qualidade_treino": "excelente|bom|regular|baixo",
+  "fadiga_estimada": "alta|media|baixa",
+  "recomendacao_proxima": "o que fazer na próxima sessão baseado nesta ride"
+}`;
+
+  try {
+    const r = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error.message);
+    const txt = d.content?.[0]?.text||'';
+    const m = txt.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('JSON inválido');
+    const db = JSON.parse(m[0]);
+
+    const qualCls = {excelente:'ab-ok',bom:'ab-ok',regular:'ab-warn',baixo:'ab-bad'};
+    const fadCls = {alta:'ab-bad',media:'ab-warn',baixa:'ab-ok'};
+    const avalCls = {positivo:'var(--green)',neutro:'var(--muted)',negativo:'var(--red)'};
+
+    document.getElementById('debrief-body').innerHTML = `
+      <div class="debrief-metrics">
+        <div class="debrief-metric">
+          <div class="debrief-metric-val" style="color:var(--accent)">${km}</div>
+          <div class="debrief-metric-lbl">km</div>
+        </div>
+        <div class="debrief-metric">
+          <div class="debrief-metric-val" style="color:var(--blue)">${min}</div>
+          <div class="debrief-metric-lbl">minutos</div>
+        </div>
+        <div class="debrief-metric">
+          <div class="debrief-metric-val" style="color:var(--green)">${vel||'—'}</div>
+          <div class="debrief-metric-lbl">km/h médio</div>
+        </div>
+        <div class="debrief-metric">
+          <div class="debrief-metric-val" style="color:var(--red)">${fc||'—'}</div>
+          <div class="debrief-metric-lbl">FC média (bpm)</div>
+        </div>
+        ${tss?`<div class="debrief-metric"><div class="debrief-metric-val" style="color:var(--purple)">${tss}</div><div class="debrief-metric-lbl">TSS estimado</div></div>`:''}
+        ${ifVal?`<div class="debrief-metric"><div class="debrief-metric-val" style="color:var(--blue)">${ifVal}</div><div class="debrief-metric-lbl">Fator intensidade</div></div>`:''}
+        <div class="debrief-metric">
+          <div class="debrief-metric-val" style="color:var(--yellow)">${elev}</div>
+          <div class="debrief-metric-lbl">elevação (m)</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+        <span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:5px;background:rgba(255,77,28,.1);color:var(--accent)">${db.classificacao}</span>
+        <span class="analise-badge ${qualCls[db.qualidade_treino]||'ab-warn'}" style="font-size:.65rem;padding:.25rem .6rem">Qualidade: ${db.qualidade_treino?.toUpperCase()}</span>
+        <span class="analise-badge ${fadCls[db.fadiga_estimada]||'ab-warn'}" style="font-size:.65rem;padding:.25rem .6rem">Fadiga: ${db.fadiga_estimada?.toUpperCase()}</span>
+      </div>
+
+      <div class="debrief-section">
+        <div class="debrief-section-title">📋 Resumo da sessão</div>
+        <div class="debrief-content">${db.resumo}</div>
+      </div>
+
+      ${db.pontos_chave?.length ? `
+      <div class="debrief-section">
+        <div class="debrief-section-title">🔑 Pontos-chave</div>
+        ${db.pontos_chave.map(p=>`
+          <div style="display:flex;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border)">
+            <div style="font-size:.7rem;color:var(--muted);width:80px;flex-shrink:0;padding-top:.1rem">${p.label}</div>
+            <div style="flex:1">
+              <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:${avalCls[p.avaliacao]||'var(--text)'}">${p.valor}</div>
+              <div style="font-size:.75rem;color:var(--muted);margin-top:.15rem;line-height:1.5">${p.detalhe}</div>
+            </div>
+          </div>`).join('')}
+      </div>` : ''}
+
+      <div style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:var(--r);padding:.9rem 1rem;margin-top:.75rem">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.35rem">🎯 Próxima sessão</div>
+        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">${db.recomendacao_proxima}</div>
+      </div>`;
+
+  } catch(e) {
+    document.getElementById('debrief-body').innerHTML = `
+      <div style="color:var(--red);font-size:.82rem;padding:1rem 0">Erro ao gerar debrief: ${e.message}</div>`;
+  }
 }
 
 // ============================================================
@@ -879,7 +1235,6 @@ function calcProgressos() {
 
   lblsEl.innerHTML = semanas.map(s=>`<div class="chart-lbl">${s.lbl}</div>`).join('');
 
-  // Evolução mensal
   const meses = [];
   for(let i=2;i>=0;i--) {
     const d = new Date(); d.setMonth(d.getMonth()-i);
@@ -887,14 +1242,15 @@ function calcProgressos() {
     const acts = S.activities.filter(a=>{const ad=new Date(a.start_date_local);return ad.getMonth()===m&&ad.getFullYear()===y;});
     const km = acts.reduce((s,a)=>s+a.distance,0)/1000;
     const hrs = acts.reduce((s,a)=>s+a.moving_time,0)/3600;
+    const tssTotal = acts.reduce((s,a)=>s+(calcTSS(a)||0),0);
     const nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    meses.push({nome:nomes[m], km, hrs, n:acts.length});
+    meses.push({nome:nomes[m], km, hrs, n:acts.length, tss:tssTotal});
   }
 
   document.getElementById('evolucao-list').innerHTML = meses.map(m=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
       <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem">${m.nome}</span>
-      <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)">${m.n} rides · ${m.km.toFixed(0)}km · ${m.hrs.toFixed(1)}h</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)">${m.n} rides · ${m.km.toFixed(0)}km · TSS ${m.tss}</span>
     </div>
   `).join('');
 }
@@ -917,7 +1273,7 @@ function calcRPs() {
 }
 
 // ============================================================
-// ADERÊNCIA AO PLANO
+// ADERÊNCIA
 // ============================================================
 function calcAderencia() {
   const iniSem = new Date(); iniSem.setDate(iniSem.getDate()-iniSem.getDay()); iniSem.setHours(0,0,0,0);
@@ -955,7 +1311,11 @@ function calcZonas() {
 function salvarCfg() {
   S.fcMax = parseInt(document.getElementById('cfg-fc').value)||185;
   S.peso  = parseInt(document.getElementById('cfg-peso').value)||75;
-  save(); calcZonas(); calcZonasDash(); alert('Salvo!');
+  S.ftp   = parseInt(document.getElementById('cfg-ftp').value)||200;
+  S.objetivo = document.getElementById('cfg-objetivo')?.value || S.objetivo;
+  S.periodizacao = document.getElementById('cfg-period')?.value || S.periodizacao;
+  S.obsAtleta = document.getElementById('cfg-obs')?.value || S.obsAtleta;
+  save(); calcZonas(); calcZonasDash(); calcTrainingStatus(); alert('Salvo!');
 }
 
 // ============================================================
@@ -991,7 +1351,7 @@ async function gerarPlanoIA() {
       <div class="ia-loading-txt"><strong>IA analisando ${S.activities.length} pedaladas...</strong><br>Montando plano de ${dias} dias personalizado.</div>
     </div>`;
 
-  pg('plano',null,document.querySelectorAll('.nav-b')[1]);
+  pg('plano', document.querySelectorAll('.nav-b')[1]);
 
   const resumo = (S.activities||[]).slice(0,20).map(a=>({
     nome:String(a.name||''),
@@ -1000,6 +1360,7 @@ async function gerarPlanoIA() {
     fc:a.average_heartrate?Math.round(a.average_heartrate):null,
     vel:a.average_speed?((a.average_speed)*3.6).toFixed(1):null,
     elev:Math.round(a.total_elevation_gain||0),
+    tss:calcTSS(a),
     data:(a.start_date_local||'').split('T')[0]
   }));
 
@@ -1010,21 +1371,23 @@ async function gerarPlanoIA() {
 
 ATLETA:
 - FC Máxima: ${S.fcMax} bpm
+- FTP estimado: ${S.ftp} W
+- FTP/kg: ${(S.ftp/S.peso).toFixed(1)} W/kg
 - Peso: ${S.peso} kg  
 - Bike: ${S.bike||'não informada'}
-- Dias disponíveis: 3-4 por semana
-- Tempo por treino: 1-2 horas
-- Foco: ${foco}
-- Objetivos gerais: força, resistência, velocidade, evolução, perda de peso
-${obs ? `- Observações: ${obs}` : ''}
+- Objetivo: ${S.objetivo||'resistência'}
+- Periodização preferida: ${S.periodizacao||'polarizado'}
+- Foco atual: ${foco}
+${S.obsAtleta ? `- Observações do atleta: ${S.obsAtleta}` : ''}
+${obs ? `- Observações adicionais: ${obs}` : ''}
 
 KM ESTA SEMANA: ${kmSemana}km
 
-ÚLTIMAS ATIVIDADES:
+ÚLTIMAS ATIVIDADES (com TSS):
 ${JSON.stringify(resumo)}
 
 PLANO ANTERIOR (aderência):
-${planoAtual.length ? JSON.stringify(planoAtual) : 'Nenhum plano anterior'}
+${planoAtual.length ? JSON.stringify(planoAtual) : 'Sem plano anterior'}
 
 ZONAS FC:
 Z1<${Math.round(S.fcMax*.6)} | Z2 ${Math.round(S.fcMax*.6)}-${Math.round(S.fcMax*.7)} | Z3 ${Math.round(S.fcMax*.7)}-${Math.round(S.fcMax*.8)} | Z4 ${Math.round(S.fcMax*.8)}-${Math.round(S.fcMax*.9)} | Z5>${Math.round(S.fcMax*.9)} bpm
@@ -1033,6 +1396,7 @@ Responda SOMENTE JSON válido sem markdown:
 {
   "analise": "análise do atleta em 2-3 frases baseada no histórico real",
   "pontos_melhora": ["ponto 1", "ponto 2"],
+  "carga_semanal_tss": 300,
   "treinos": [
     {
       "dia_offset": 0,
@@ -1041,21 +1405,18 @@ Responda SOMENTE JSON válido sem markdown:
       "duracao": "1h",
       "desc": "Descrição detalhada com FC alvo, cadência, estratégia",
       "fc_alvo": "138-152 bpm",
+      "tss_alvo": 50,
       "intervalos": null
     }
   ]
-}
-
-Tipos: Z2, Intervalado, Longão, Força, Recuperação, Descanso
-Para ${dias} dias inclua proporção correta de descanso. Para intervalados use campo intervalos.`;
+}`;
 
   try {
     if (!S.apiKey) throw new Error('Chave API não configurada');
-    const requestBody = JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:3000,messages:[{role:'user',content:prompt}]});
     const r = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},
-      body: requestBody
+      body: JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:3000,messages:[{role:'user',content:prompt}]})
     });
     const d = await r.json();
     if (d.error) throw new Error(d.error.message || JSON.stringify(d.error));
@@ -1072,7 +1433,7 @@ Para ${dias} dias inclua proporção correta de descanso. Para intervalados use 
         id: Date.now()+Math.random()+'',
         data: d2.toISOString().split('T')[0],
         tipo: t.tipo, nome: t.nome,
-        desc: t.desc + (t.intervalos?` | ${t.intervalos}`:'') + (t.fc_alvo?` | FC: ${t.fc_alvo}`:''),
+        desc: t.desc + (t.intervalos?` | ${t.intervalos}`:'') + (t.fc_alvo?` | FC: ${t.fc_alvo}`:'') + (t.tss_alvo?` | TSS alvo: ${t.tss_alvo}`:''),
         duracao: t.duracao, concluido: false, geradoIA: true
       };
     });
@@ -1085,6 +1446,7 @@ Para ${dias} dias inclua proporção correta de descanso. Para intervalados use 
         <div class="ia-status-lbl">✓ Plano de ${dias} dias gerado</div>
         <div class="ia-status-txt">${planoIA.analise}</div>
         ${planoIA.pontos_melhora?.length ? `<div style="margin-top:.5rem;font-size:.75rem;color:var(--muted)">💡 Foque em: ${planoIA.pontos_melhora.join(' · ')}</div>` : ''}
+        ${planoIA.carga_semanal_tss ? `<div style="margin-top:.4rem;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--blue)">📊 Carga semanal alvo: ${planoIA.carga_semanal_tss} TSS</div>` : ''}
       </div>`;
 
     renderPlano();
@@ -1095,13 +1457,13 @@ Para ${dias} dias inclua proporção correta de descanso. Para intervalados use 
     console.error(e);
     document.getElementById('ia-result').innerHTML = `
       <div style="background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.2);border-radius:var(--r);padding:1rem;margin-bottom:.85rem;font-size:.8rem;color:var(--red)">
-        Erro: ${e.message}. Verifica chave API e conexão.
+        Erro: ${e.message}. Verifique a chave API e conexão.
       </div>`;
   }
 }
 
 // ============================================================
-// IA — ANÁLISE
+// IA — ANÁLISE GERAL
 // ============================================================
 async function gerarAnalise() {
   if (!S.apiKey) { alert('Configure a chave da IA no Perfil!'); return; }
@@ -1116,6 +1478,7 @@ async function gerarAnalise() {
     km:(a.distance/1000).toFixed(1), min:Math.round(a.moving_time/60),
     fc:a.average_heartrate?Math.round(a.average_heartrate):null,
     vel:a.average_speed?((a.average_speed)*3.6).toFixed(1):null,
+    tss:calcTSS(a), if:calcIF(a),
     data:a.start_date_local?.split('T')[0], nome:a.name
   }));
 
@@ -1125,9 +1488,9 @@ async function gerarAnalise() {
   const prompt = `Analise o desempenho deste ciclista e identifique pontos fortes, falhas e recomendações.
 
 DADOS:
-- FC Máx: ${S.fcMax}bpm | Peso: ${S.peso}kg
+- FC Máx: ${S.fcMax}bpm | Peso: ${S.peso}kg | FTP: ${S.ftp}W | FTP/kg: ${(S.ftp/S.peso).toFixed(1)}
+- Objetivo: ${S.objetivo||'resistência'} | Periodização: ${S.periodizacao||'polarizado'}
 - Aderência ao plano: ${aderencia}%
-- Objetivos: força, resistência, velocidade, emagrecimento
 
 ÚLTIMAS ATIVIDADES: ${JSON.stringify(resumo)}
 PLANO: ${JSON.stringify(planoResume)}
@@ -1138,7 +1501,8 @@ Responda SOMENTE JSON:
   "pontos_fortes": [{"titulo":"...","desc":"..."}],
   "falhas": [{"titulo":"...","desc":"...","impacto":"alto|medio|baixo"}],
   "recomendacoes": [{"titulo":"...","desc":"...","prioridade":"alta|media|baixa"}],
-  "proximo_foco": "o que focar nos próximos 7 dias"
+  "proximo_foco": "o que focar nos próximos 7 dias",
+  "ftp_sugerido": 210
 }`;
 
   try {
@@ -1157,11 +1521,20 @@ Responda SOMENTE JSON:
     const impCls = {'alto':'ab-bad','medio':'ab-warn','baixo':'ab-ok'};
     const priCls = {'alta':'ab-bad','media':'ab-warn','baixa':'ab-ok'};
 
+    const ftpSugestao = a.ftp_sugerido && a.ftp_sugerido !== S.ftp ? `
+      <div style="background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.25);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:.65rem">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:.35rem">⚡ Sugestão de FTP</div>
+        <div style="font-size:.82rem;color:var(--muted)">A IA sugere ajustar seu FTP para <strong style="color:var(--purple)">${a.ftp_sugerido}W</strong> (atual: ${S.ftp}W).</div>
+        <button onclick="S.ftp=${a.ftp_sugerido};save();calcZonasDash();calcTrainingStatus();alert('FTP atualizado para ${a.ftp_sugerido}W!')" style="margin-top:.5rem;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);border-radius:6px;padding:.3rem .75rem;color:var(--purple);font-family:'DM Mono',monospace;font-size:.65rem;cursor:pointer">Aplicar FTP sugerido</button>
+      </div>` : '';
+
     document.getElementById('analise-result').innerHTML = `
       <div class="ia-status-box" style="margin-bottom:.65rem">
         <div class="ia-status-lbl">📊 Resumo geral</div>
         <div class="ia-status-txt">${a.resumo_geral}</div>
       </div>
+
+      ${ftpSugestao}
 
       ${a.pontos_fortes?.map(p=>`
         <div class="analise-card">
@@ -1240,7 +1613,6 @@ function zerarManut(id) {
     const totalKm = S.activities.reduce((s,a)=>s+a.distance,0)/1000;
     m.kmBase = totalKm; m.kmAtual = 0;
     save(); renderManut(); checarManutAlerta();
-  renderFitData();
   }
 }
 
@@ -1274,32 +1646,20 @@ function importarFit(input) {
   const reader = new FileReader();
   reader.onload = e => {
     const bytes = new Uint8Array(e.target.result);
-    // FIT file parser - extrai heart rate dos records
-    // FIT format: header (14 bytes) + records
     const results = parseFitFile(bytes);
     
     if(results.fcMedia) {
-      // Salva no estado
       const hoje = new Date().toISOString().split('T')[0];
       if(!S.fitData) S.fitData = [];
       S.fitData.unshift({
-        data: hoje,
-        fcMedia: results.fcMedia,
-        fcMax: results.fcMax,
-        fcMin: results.fcMin,
-        distancia: results.distancia,
-        duracao: results.duracao,
-        arquivo: file.name
+        data: hoje, fcMedia: results.fcMedia, fcMax: results.fcMax,
+        fcMin: results.fcMin, distancia: results.distancia,
+        duracao: results.duracao, arquivo: file.name
       });
-      save();
-      renderFitData();
-      alert(`✅ Importado!
-FC Média: ${results.fcMedia} bpm
-FC Máx: ${results.fcMax} bpm
-Distância: ${results.distancia.toFixed(1)} km
-Duração: ${Math.round(results.duracao/60)} min`);
+      save(); renderFitData();
+      alert(`✅ Importado!\nFC Média: ${results.fcMedia} bpm\nFC Máx: ${results.fcMax} bpm\nDistância: ${results.distancia.toFixed(1)} km\nDuração: ${Math.round(results.duracao/60)} min`);
     } else {
-      alert('Arquivo importado mas sem dados de FC. Verifique se a cinta cardíaca estava conectada durante o treino.');
+      alert('Arquivo importado mas sem dados de FC. Verifique se a cinta cardíaca estava conectada.');
     }
   };
   reader.readAsArrayBuffer(file);
@@ -1307,45 +1667,30 @@ Duração: ${Math.round(results.duracao/60)} min`);
 
 function parseFitFile(bytes) {
   const results = { fcMedia: null, fcMax: 0, fcMin: 255, distancia: 0, duracao: 0, hrValues: [] };
-  
   try {
-    // Skip FIT header (14 bytes)
     let offset = 14;
-    const len = bytes.length - 2; // skip CRC
-    
-    // Simple scan for heart rate values in record messages
-    // FIT records with field definition 3 = heart_rate
+    const len = bytes.length - 2;
     while(offset < len - 4) {
       const recordHeader = bytes[offset];
-      
-      // Check for data message (not definition)
       if((recordHeader & 0x40) === 0) {
-        // Scan nearby bytes for HR-like values (40-220 bpm)
         for(let i = offset+1; i < Math.min(offset+20, len); i++) {
           const val = bytes[i];
-          if(val >= 40 && val <= 220) {
-            results.hrValues.push(val);
-          }
+          if(val >= 40 && val <= 220) results.hrValues.push(val);
         }
       }
       offset++;
     }
-    
-    // Filter outliers and calculate stats
     if(results.hrValues.length > 50) {
-      // Sort and remove top/bottom 10%
       const sorted = [...results.hrValues].sort((a,b) => a-b);
       const trim = Math.floor(sorted.length * 0.1);
       const trimmed = sorted.slice(trim, sorted.length - trim);
-      
       results.fcMedia = Math.round(trimmed.reduce((s,v) => s+v, 0) / trimmed.length);
       results.fcMax = sorted[sorted.length - 1 - trim];
       results.fcMin = sorted[trim];
-      results.distancia = results.hrValues.length * 0.01; // rough estimate
+      results.distancia = results.hrValues.length * 0.01;
       results.duracao = results.hrValues.length;
     }
   } catch(e) { console.error('FIT parse error:', e); }
-  
   return results;
 }
 
@@ -1469,7 +1814,7 @@ function exportFit(e,id) {
 }
 
 // ============================================================
-// MODAL TREINO MANUAL
+// MODAL / NAV
 // ============================================================
 function abrirModal(){document.getElementById('mo-treino').classList.add('open');}
 function fecharModal(id){document.getElementById(id).classList.remove('open');}
@@ -1483,12 +1828,9 @@ function salvarTreino() {
   S.plano.push({id:Date.now()+'',data,tipo:tipoSel,nome:tipoSel==='Z2'?'Z2 Base':tipoSel,desc:obs||`Treino ${tipoSel}`,duracao:dur,concluido:false,geradoIA:false});
   save();renderPlano();proxTreino();fecharModal('mo-treino');
   document.getElementById('t-obs').value='';
-  pg('plano',null,document.querySelectorAll('.nav-b')[1]);
+  pg('plano',document.querySelectorAll('.nav-b')[1]);
 }
 
-// ============================================================
-// PERFIL
-// ============================================================
 function trocarChave(){
   const k=prompt('Cole a nova chave API:');
   if(k&&k.startsWith('sk-ant')){S.apiKey=k;save();renderPerfil();alert('Chave atualizada!');}
@@ -1504,20 +1846,11 @@ function abrirHealth() {
 
 function sair(){if(confirm('Desconectar?')){localStorage.removeItem('pp5');location.reload();}}
 
-// ============================================================
-// NAVEGAÇÃO
-// ============================================================
-function pg(id,tabEl,navEl){
+function pg(id, navEl) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nav-b').forEach(b=>b.classList.remove('on'));
   document.getElementById('p-'+id).classList.add('on');
-  if(navEl)navEl.classList.add('on');
-  const navMap={dash:0,plano:1,prog:2,rides:3,analise:4,manut:5,perfil:6};
-  if(!navEl&&navMap[id]!==undefined)document.querySelectorAll('.nav-b')[navMap[id]]?.classList.add('on');
-  // Update header title
-  const titles={dash:'Dashboard',plano:'Plano',prog:'Progresso',rides:'Rides',analise:'Análise IA',manut:'Manutenção',perfil:'Perfil'};
-  const titleEl = document.getElementById('page-title');
-  if(titleEl) titleEl.textContent = titles[id]||'PedalPlan';
+  if(navEl) navEl.classList.add('on');
 }
 
 function tela(id,txt){
@@ -1529,20 +1862,30 @@ function tela(id,txt){
 // ============================================================
 // STORAGE
 // ============================================================
-function save(){localStorage.setItem('pp5',JSON.stringify({token:S.token,refresh:S.refresh,expires:S.expires,athlete:S.athlete,activities:S.activities,plano:S.plano,manut:S.manut,fcMax:S.fcMax,peso:S.peso,apiKey:S.apiKey,bike:S.bike,fitData:S.fitData}));}
+function save(){
+  localStorage.setItem('pp5',JSON.stringify({
+    token:S.token,refresh:S.refresh,expires:S.expires,
+    athlete:S.athlete,activities:S.activities,plano:S.plano,
+    manut:S.manut,fcMax:S.fcMax,peso:S.peso,ftp:S.ftp,
+    apiKey:S.apiKey,bike:S.bike,fitData:S.fitData,
+    objetivo:S.objetivo,periodizacao:S.periodizacao,obsAtleta:S.obsAtleta
+  }));
+}
 
 function load(){
   try{
     const d=JSON.parse(localStorage.getItem('pp5')||'{}');
     S.token=d.token||null;S.refresh=d.refresh||null;S.expires=d.expires||null;
     S.athlete=d.athlete||null;S.activities=d.activities||[];S.plano=d.plano||[];
-    S.manut=d.manut||[];S.fcMax=d.fcMax||185;S.peso=d.peso||75;
+    S.manut=d.manut||[];S.fcMax=d.fcMax||185;S.peso=d.peso||75;S.ftp=d.ftp||200;
     S.apiKey=d.apiKey||null;S.bike=d.bike||'';S.fitData=d.fitData||[];
+    S.objetivo=d.objetivo||'resistencia';S.periodizacao=d.periodizacao||'polarizado';
+    S.obsAtleta=d.obsAtleta||'';
   }catch(e){}
 }
 
-// Fechar modais
-['mo-treino','mo-ia','mo-manut'].forEach(id=>{
+// Fechar modais ao clicar fora
+['mo-treino','mo-ia','mo-manut','mo-debrief'].forEach(id=>{
   document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))fecharModal(id);});
 });
 </script>

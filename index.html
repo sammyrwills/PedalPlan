@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="pt-BR">
+<html lang="pt-BR" style="background:#0d0d0d;color-scheme:dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -31,8 +31,8 @@ html { height: 100%; height: -webkit-fill-available; }
 body {
 height: 100%;
 height: -webkit-fill-available;
-background: var(–bg);
-color: var(–text);
+background: #0d0d0d !important;
+color: #ffffff !important;
 font-family: ‘Inter’, sans-serif;
 overflow: hidden;
 -webkit-font-smoothing: antialiased;
@@ -40,14 +40,18 @@ overflow: hidden;
 
 /* ── SCREENS ── */
 .screen {
-display: none;
+display: none !important;
 position: fixed;
 inset: 0;
 z-index: 10;
 flex-direction: column;
 background: var(–bg);
+visibility: hidden;
 }
-.screen.active { display: flex; }
+.screen.active {
+display: flex !important;
+visibility: visible;
+}
 
 /* ── LOGIN ── */
 #s-login {
@@ -581,7 +585,7 @@ animation: slideUp 0.3s ease;
 
 <!-- LOGIN -->
 
-<div class="screen active" id="s-login">
+<div class="screen" id="s-login" style="display:flex">
   <div class="login-wrap">
     <div class="login-icon">🚴</div>
     <div class="login-title">PEDAL<span>PLAN</span></div>
@@ -596,7 +600,7 @@ animation: slideUp 0.3s ease;
 
 <!-- SETUP -->
 
-<div class="screen" id="s-setup">
+<div class="screen" id="s-setup" style="display:none">
   <div class="setup-inner">
     <div style="height:env(safe-area-inset-top)"></div>
     <div style="padding-top:1.5rem">
@@ -621,14 +625,14 @@ animation: slideUp 0.3s ease;
 
 <!-- LOADING -->
 
-<div class="screen" id="s-load">
+<div class="screen" id="s-load" style="display:none">
   <div class="spin"></div>
   <div class="load-txt" id="load-txt">Carregando...</div>
 </div>
 
 <!-- APP -->
 
-<div class="screen" id="s-app">
+<div class="screen" id="s-app" style="display:none">
   <header class="app-head">
     <div class="head-logo">PEDAL<span>PLAN</span></div>
     <div class="head-right">
@@ -1006,6 +1010,16 @@ function loadLocal() {
 // BOOT
 // ============================================================
 window.addEventListener('load', async () => {
+  // Limpa dados antigos de versões anteriores
+  ['pp5','pedalplan','pedalplan_v2','pp6'].forEach(k => {
+    const d = localStorage.getItem(k);
+    if (d && !d.includes('pp6_local')) localStorage.removeItem(k);
+  });
+  // Força tela correta
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
   loadLocal();
   document.getElementById('btn-login').href = stravaUrl();
 
@@ -1743,8 +1757,13 @@ window.nav=function(id,navEl){
 };
 
 function tela(id,txt){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  const el = document.getElementById('s-'+id);
+  el.classList.add('active');
+  el.style.display='flex';
   if(txt&&id==='load')document.getElementById('load-txt').textContent=txt;
 }
 
